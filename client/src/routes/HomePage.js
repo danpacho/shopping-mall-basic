@@ -13,7 +13,12 @@ import NavBar from "../utils/NavBar";
 //-------------------------------------------------------------
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../_action/user_action";
-import { Login, UserAdd, ArrowDown } from "../assets/iconComponents";
+import {
+    Login,
+    UserAdd,
+    ArrowDown,
+    UploadMain,
+} from "../assets/iconComponents";
 //-------------------------------------------------------------
 
 const Button = styled.button`
@@ -123,6 +128,14 @@ function LandingPage() {
 
                 {login && (
                     <>
+                        <Link to="upload">
+                            <Button
+                                className={`${BTN_STYLE} focus:ring-gray-400 `}
+                            >
+                                upload
+                                <UploadMain />
+                            </Button>
+                        </Link>
                         <div
                             className={
                                 "flex flex-row justify-between items-center mr-4"

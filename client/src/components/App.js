@@ -1,13 +1,14 @@
 import { HashRouter as Router, Route } from "react-router-dom";
 
 import Auth from "../higerOrderComponents/Auth";
-import AccountPage from "../routes/login_user/AccountPage";
-import AdminPage from "../routes/admin/AdminPage";
+import Account from "../routes/login_user/AccountPage";
+import Admin from "../routes/admin/AdminPage";
 
 import Home from "../routes/HomePage";
 import Login from "../routes/LoginPage";
 import Register from "../routes/RegisterPage";
-import SettingPage from "../routes/login_user/SettingPage";
+import Setting from "../routes/login_user/SettingPage";
+import UploadFile from "../routes/UploadFilePage";
 
 function App() {
     return (
@@ -15,17 +16,11 @@ function App() {
             <Route exact path="/" component={Auth(Home, true)} />
             <Route exact path="/login" component={Auth(Login, true)} />
             <Route exact path="/register" component={Auth(Register, true)} />
-            <Route exact path="/account" component={Auth(AccountPage, false)} />
-            <Route
-                exact
-                path="/settings"
-                component={Auth(SettingPage, false)}
-            />
-            <Route
-                exact
-                path="/admin"
-                component={Auth(AdminPage, false, true)}
-            />
+            <Route exact path="/account" component={Auth(Account, false)} />
+            <Route exact path="/upload" component={Auth(UploadFile, false)} />
+            <Route exact path="/settings" component={Auth(Setting, false)} />
+
+            <Route exact path="/admin" component={Auth(Admin, false, true)} />
         </Router>
     );
 }
