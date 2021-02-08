@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 //mongoose 연결
 const mongoose = require("mongoose");
+const cors = require("cors");
 //body-parser 연결
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -14,7 +15,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //json 형태 데이터 가져옴
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(cors());
 
+//! uploads 파일을 port 5000번 서버를 통해 제공.
+
+//! 라우팅
 //--------------------------------------------------------------------------------------------------
 
 mongoose
@@ -29,6 +34,9 @@ mongoose
     .catch((err) => console.log(err));
 //1. Mongo DB연결
 //2. err ,connect 매세지 출력
+app.use("/api/product", require("./routes/product"));
+app.use("/uploads", express.static("uploads"));
+
 //--------------------------------------------------------------------------------------------------
 
 app.get("/", (req, res) => {
@@ -154,6 +162,8 @@ app.get("/api/users/logout", authUser, (req, res) => {
         }
     );
 });
+
+//!user info updata--------------
 
 app.patch("/api/users/update", authUser, (req, res) => {
     const { name, email } = req.body;
