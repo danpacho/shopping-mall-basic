@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const MainLogo = styled.h1`
     font-size: 2.5rem;
@@ -14,6 +14,12 @@ const MainLogo = styled.h1`
     user-select: none;
 
     flex: ${(props) => props.isMainPage && "5"};
+
+    ${(props) =>
+        props.isUploadPage &&
+        css`
+            font-size: 2rem;
+        `}
 `;
 
 export default MainLogo;

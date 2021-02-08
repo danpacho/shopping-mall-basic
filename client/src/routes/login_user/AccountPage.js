@@ -1,17 +1,23 @@
-import styled, { css } from "styled-components";
 //--------------------------------------------------
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 //--------------------------------------------------
 import { useDispatch, useSelector } from "react-redux";
+import { modifyingUser } from "../../_action/user_action";
 //--------------------------------------------------
 import { Link, withRouter } from "react-router-dom";
+//--------------------------------------------------
+import { useForm } from "react-hook-form";
+//--------------------------------------------------
+import styled, { css } from "styled-components";
 //--------------------------------------------------
 import Container from "../../utils/Container";
 import Header from "../../utils/Header";
 import MainLogo from "../../utils/MainLogo";
-import { UserDemo } from "../../assets/iconComponents";
-import { useForm } from "react-hook-form";
 import Input from "../../utils/Input";
+import Err from "../../utils/Err";
+//--------------------------------------------------
+import { UserDemo } from "../../assets/iconComponents";
+//--------------------------------------------------
 import {
     BTN_STYLE,
     ERR_INPUT_STYLE,
@@ -22,8 +28,7 @@ import {
     CONFIG_SAFE_BTN_STYLE,
     CONFIG_SUCCESS_STYLE,
 } from "../../utils/ClassName";
-import Err from "../../utils/Err";
-import { modifyingUser } from "../../_action/user_action";
+import ConfigButton from "../../utils/ConfigButton";
 //--------------------------------------------------
 
 const UserConfigContainer = styled.div`
@@ -85,27 +90,6 @@ const List = styled.li`
             }
         `}
     display:${(props) => props.display && "none"};
-`;
-
-const ConfigButton = styled.button`
-    transition: all ease-out 0.1s;
-
-    width: 5rem;
-
-    color: whitesmoke;
-    background: #0d0d0d;
-
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-
-    &:active,
-    &:focus {
-        outline: none;
-        /* 클릭시 남는 것들 완전히 제거 */
-        border: none;
-    }
 `;
 
 //--------------------------------------------------
