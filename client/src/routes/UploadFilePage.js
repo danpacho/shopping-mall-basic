@@ -18,7 +18,8 @@ import {
 } from "../utils/ClassName";
 //------------------------------------------------
 import { UploadMain } from "../assets/iconComponents";
-import UploadFiles from "../utils/UploadComponent";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 //------------------------------------------------
 
 const InputContainer = styled.form`
@@ -98,7 +99,14 @@ const Title = styled.h1`
 function UploadFilePage() {
     const { register, handleSubmit, errors, watch } = useForm();
 
-    const onSubmit = () => {};
+    const { uploadSuccess = false } = useSelector((state) => ({
+        uploadSuccess: state.userFileReducer.uploadSuccess,
+    }));
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+        console.log(uploadSuccess.uploadSuccess);
+    };
 
     return (
         <Container>
@@ -110,7 +118,11 @@ function UploadFilePage() {
 
             <InputContainer isUploadPage={true} className={"rounded shadow"}>
                 <Head>
-                    <MainLogo isUploadPage={true}>Share Your File</MainLogo>
+                    <MainLogo isUploadPage={true}>
+                        {!uploadSuccess
+                            ? "Step1 - Share Your File "
+                            : "Step2 - Set Thumbnail"}
+                    </MainLogo>
                 </Head>
                 <Content>
                     <UploadFile />
@@ -133,15 +145,16 @@ function UploadFilePage() {
                         />
                         <Title>Tags</Title>
                         <Input
-                            name="playTime"
+                            name="tags"
                             type="text"
                             isUploadPage={true}
                             placeholder="spreate tags by ,"
                             ref={register({ required: true })}
                         />
-                        <Title>Play Time</Title>
+                        <Title>Add Play Time - SEC</Title>
                         <Input
                             isUploadPage={true}
+                            name="playTime"
                             type="number"
                             placeholder="video play time SEC"
                             max="30"

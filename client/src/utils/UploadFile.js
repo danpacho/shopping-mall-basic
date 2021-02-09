@@ -9,6 +9,9 @@ import styled from "styled-components";
 //---------------------------------------------------------------
 import { Pdf, Upload } from "../assets/iconComponents";
 //---------------------------------------------------------------
+import { useDispatch } from "react-redux";
+import { sendUserFile } from "../_action/user_file_action";
+//---------------------------------------------------------------
 
 const UploadContainer = styled.div`
     transition: all ease-in-out 0.1s;
@@ -69,28 +72,46 @@ const UploadedImg = styled.img`
 //---------------------------------------------------------------
 
 function UploadFile() {
-    const [pictures, setPictures] = useState([]);
-    const [uploadComplete, setUploadComplete] = useState(false);
+    const dispatch = useDispatch();
 
-    const onDropHandler = async (files) => {
+    const [uploadComplete, setUploadComplete] = useState(false);
+    const [files, setFiles] = useState([]);
+    const [thumbnails, setThumbnails] = useState([]);
+
+    const onDropHandler = (files) => {
         const formData = new FormData();
         formData.append("file", files[0]);
         const config = {
             header: { "content-type": "multipart/fomr-data" },
         };
 
+        dispatchUserFile(formData, config);
+    };
+
+    const dispatchUserFile = async (formData, config) => {
         try {
-            const response = await axios.post(
-                "/api/product/pictures",
-                formData,
-                config
-            );
-            if (response.data.uploadSuccess) {
-                setPictures([...pictures, response.data.filePath]);
-                setUploadComplete(true);
+            if (!uploadComplete) {
+                const response = await dispatch(sendUserFile(formData, config));
+
+                if (response.payload.uploadSuccess) {
+                    console.log(response.payload);
+                    setFiles([...files, response.payload.filePath]);
+                    setUploadComplete(true);
+                } else {
+                    setUploadComplete(false);
+                    alert("File upload failed😢");
+                }
             } else {
-                setUploadComplete(false);
-                alert("file upload failed!");
+                const response = await dispatch(sendUserFile(formData, config));
+
+                if (response.payload.uploadThumbnailSuccess) {
+                    console.log(response.payload);
+                    setThumbnails([...thumbnails, response.payload.filePath]);
+                    setUploadComplete(true);
+                } else {
+                    setUploadComplete(false);
+                    alert("Thumbnail upload failed😢");
+                }
             }
         } catch (err) {
             setUploadComplete(false);
@@ -109,9 +130,9 @@ function UploadFile() {
                                 <Upload width={"3em"} height={"3em"} />
                             </UploadContainer>
                         ) : (
-                            pictures.map((picture, idx) => (
-                                <UploadImgContainer key={picture}>
-                                    {picture.includes("pdf", 1) ? (
+                            files.map((file) => (
+                                <UploadImgContainer key={file}>
+                                    {file.includes("pdf", 1) ? (
                                         <Pdf
                                             width={"5em"}
                                             height={"5em"}
@@ -119,12 +140,10 @@ function UploadFile() {
                                         />
                                     ) : (
                                         <UploadedImg
-                                            src={`http://localhost:5000/${picture}`}
+                                            src={`http://localhost:5000/${file}`}
                                         />
                                     )}
-                                    <p className={"mt-4 font-bold"}>
-                                        {picture}
-                                    </p>
+                                    <p className={"mt-4 font-bold"}>{file}</p>
                                 </UploadImgContainer>
                             ))
                         )}
