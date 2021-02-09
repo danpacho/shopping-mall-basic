@@ -17,6 +17,7 @@ const Input = styled.input`
         outline: none;
         /* 클릭시 남는 것들 완전히 제거 */
         border: none;
+        border-radius: 2.5px;
     }
 
     ${(props) =>
@@ -54,6 +55,7 @@ const Input = styled.input`
 
             &:active,
             &:focus {
+                border-radius: 0px;
                 border-bottom: 1.5px solid #262626;
             }
 

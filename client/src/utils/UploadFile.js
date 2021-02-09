@@ -3,14 +3,15 @@ import Dropzone from "react-dropzone";
 //---------------------------------------------------------------
 import axios from "axios";
 //---------------------------------------------------------------
-import { useState } from "react";
+import { useEffect, useState } from "react";
 //---------------------------------------------------------------
 import styled from "styled-components";
 //---------------------------------------------------------------
 import { Pdf, Upload } from "../assets/iconComponents";
 //---------------------------------------------------------------
 import { useDispatch } from "react-redux";
-import { sendUserFile } from "../_action/user_file_action";
+import { sendUserFile, sendUserThumbnail } from "../_action/user_file_action";
+import { set } from "mongoose";
 //---------------------------------------------------------------
 
 const UploadContainer = styled.div`
@@ -39,6 +40,10 @@ const UploadContainer = styled.div`
         color: black;
         opacity: 0.9;
     }
+
+    background-image: ${(props) =>
+        props.isThumbnailPage &&
+        "linear-gradient(to right, #f78ca0 0%, #f9748f 19%, #fd868c 60%, #fe9a8b 100%);"};
 `;
 
 const UploadImgContainer = styled.div`
@@ -71,12 +76,20 @@ const UploadedImg = styled.img`
 
 //---------------------------------------------------------------
 
-function UploadFile() {
+function UploadFile({ nextStep }) {
     const dispatch = useDispatch();
 
     const [uploadComplete, setUploadComplete] = useState(false);
+    const [uploadThumbnailComplete, setUploadThumbnailComplete] = useState(
+        false
+    );
+
     const [files, setFiles] = useState([]);
     const [thumbnails, setThumbnails] = useState([]);
+
+    useEffect(() => {
+        console.log(nextStep.uploadSuccess);
+    });
 
     const onDropHandler = (files) => {
         const formData = new FormData();
@@ -91,66 +104,98 @@ function UploadFile() {
     const dispatchUserFile = async (formData, config) => {
         try {
             if (!uploadComplete) {
-                const response = await dispatch(sendUserFile(formData, config));
+                const fileResponse = await dispatch(
+                    sendUserFile(formData, config)
+                );
 
-                if (response.payload.uploadSuccess) {
-                    console.log(response.payload);
-                    setFiles([...files, response.payload.filePath]);
+                if (fileResponse.payload.uploadSuccess) {
+                    console.log(fileResponse.payload);
+                    setFiles([...files, fileResponse.payload.filePath]);
                     setUploadComplete(true);
                 } else {
                     setUploadComplete(false);
                     alert("File upload failed😢");
                 }
             } else {
-                const response = await dispatch(sendUserFile(formData, config));
+                const thumbnailResponse = await dispatch(
+                    sendUserThumbnail(formData, config)
+                );
 
-                if (response.payload.uploadThumbnailSuccess) {
-                    console.log(response.payload);
-                    setThumbnails([...thumbnails, response.payload.filePath]);
-                    setUploadComplete(true);
+                if (thumbnailResponse.payload.uploadThumbnailSuccess) {
+                    console.log(thumbnailResponse.payload);
+                    setThumbnails([
+                        ...thumbnails,
+                        thumbnailResponse.payload.filePath,
+                    ]);
+                    setUploadThumbnailComplete(true);
                 } else {
-                    setUploadComplete(false);
+                    setUploadThumbnailComplete(false);
                     alert("Thumbnail upload failed😢");
                 }
             }
         } catch (err) {
-            setUploadComplete(false);
             console.log(err);
         }
     };
 
-    return (
-        <>
-            <Dropzone onDrop={onDropHandler}>
-                {({ getRootProps, getInputProps }) => (
-                    <>
-                        {!uploadComplete ? (
-                            <UploadContainer {...getRootProps()}>
-                                <input {...getInputProps()} />
-                                <Upload width={"3em"} height={"3em"} />
-                            </UploadContainer>
-                        ) : (
-                            files.map((file) => (
-                                <UploadImgContainer key={file}>
-                                    {file.includes("pdf", 1) ? (
-                                        <Pdf
-                                            width={"5em"}
-                                            height={"5em"}
-                                            color={"#F2294E"}
-                                        />
-                                    ) : (
-                                        <UploadedImg
-                                            src={`http://localhost:5000/${file}`}
-                                        />
-                                    )}
-                                    <p className={"mt-4 font-bold"}>{file}</p>
-                                </UploadImgContainer>
-                            ))
-                        )}
-                    </>
-                )}
-            </Dropzone>
-        </>
+    return !nextStep.uploadSuccess ? (
+        <Dropzone onDrop={onDropHandler}>
+            {({ getRootProps, getInputProps }) => (
+                <>
+                    {!uploadComplete ? (
+                        <UploadContainer
+                            {...getRootProps()}
+                            isThumbnailPage={nextStep}
+                        >
+                            <input {...getInputProps()} />
+                            <Upload width={"3em"} height={"3em"} />
+                        </UploadContainer>
+                    ) : (
+                        files.map((file) => (
+                            <UploadImgContainer key={file}>
+                                {file.includes("pdf", 1) ? (
+                                    <Pdf
+                                        width={"5em"}
+                                        height={"5em"}
+                                        color={"#F2294E"}
+                                    />
+                                ) : (
+                                    <UploadedImg
+                                        src={`http://localhost:5000/${file}`}
+                                    />
+                                )}
+                                <p className={"mt-4 font-bold"}>{file}</p>
+                            </UploadImgContainer>
+                        ))
+                    )}
+                </>
+            )}
+        </Dropzone>
+    ) : (
+        <Dropzone onDrop={onDropHandler}>
+            {({ getRootProps, getInputProps }) => (
+                <>
+                    {!uploadThumbnailComplete ? (
+                        <UploadContainer
+                            {...getRootProps()}
+                            isThumbnailPage={nextStep}
+                        >
+                            <input {...getInputProps()} />
+                            <Upload width={"3em"} height={"3em"} />
+                        </UploadContainer>
+                    ) : (
+                        thumbnails.map((thumbnail) => (
+                            <UploadImgContainer key={thumbnail}>
+                                <UploadedImg
+                                    src={`http://localhost:5000/${thumbnail}`}
+                                />
+                                <p className={"mt-4 font-bold"}>{thumbnail}</p>
+                            </UploadImgContainer>
+                        ))
+                    )}
+                </>
+            )}
+        </Dropzone>
     );
 }
 

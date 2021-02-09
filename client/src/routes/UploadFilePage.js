@@ -103,10 +103,15 @@ function UploadFilePage() {
         uploadSuccess: state.userFileReducer.uploadSuccess,
     }));
 
-    const onSubmit = (e) => {
+    const [upload, setUpload] = useState(false);
+
+    const updateUploadState = (e) => {
         e.preventDefault();
-        console.log(uploadSuccess.uploadSuccess);
+
+        setUpload(uploadSuccess);
     };
+
+    const sendData = () => {};
 
     return (
         <Container>
@@ -119,61 +124,90 @@ function UploadFilePage() {
             <InputContainer isUploadPage={true} className={"rounded shadow"}>
                 <Head>
                     <MainLogo isUploadPage={true}>
-                        {!uploadSuccess
+                        {!upload
                             ? "Step1 - Share Your File "
                             : "Step2 - Set Thumbnail"}
                     </MainLogo>
                 </Head>
-                <Content>
-                    <UploadFile />
-                    <Descriptions>
-                        <Title>Title</Title>
-                        <Input
-                            name="title"
-                            type="text"
-                            isUploadPage={true}
-                            placeholder="title here!"
-                            ref={register({ required: true })}
-                        />
-                        <Title>Descrition</Title>
-                        <Input
-                            name="description"
-                            type="text"
-                            isUploadPage={true}
-                            placeholder="description here!"
-                            ref={register({ required: true })}
-                        />
-                        <Title>Tags</Title>
-                        <Input
-                            name="tags"
-                            type="text"
-                            isUploadPage={true}
-                            placeholder="spreate tags by ,"
-                            ref={register({ required: true })}
-                        />
-                        <Title>Add Play Time - SEC</Title>
-                        <Input
-                            isUploadPage={true}
-                            name="playTime"
-                            type="number"
-                            placeholder="video play time SEC"
-                            max="30"
-                            min="5"
-                            ref={register({ required: true })}
-                        />
-                        <ConfigButton
-                            isUploadPage={true}
-                            className={`${CONFIG_BTN_STYLE} ${
-                                !errors ||
-                                CONFIG_SAFE_BTN_STYLE ||
-                                CONFIG_ERR_BTN_STYLE
-                            }`}
-                            onClick={onSubmit}
-                        >
-                            <UploadMain />
-                        </ConfigButton>
-                    </Descriptions>
-                </Content>
+
+                {!upload ? (
+                    <Content>
+                        <UploadFile nextStep={upload} />
+                        <Descriptions>
+                            <Title>Title</Title>
+                            <Input
+                                name="title"
+                                type="text"
+                                isUploadPage={true}
+                                placeholder="title here!"
+                                ref={register({ required: true })}
+                            />
+                            <Title>Descrition</Title>
+                            <Input
+                                name="description"
+                                type="text"
+                                isUploadPage={true}
+                                placeholder="description here!"
+                                ref={register({ required: true })}
+                            />
+                            <Title>Tags</Title>
+                            <Input
+                                name="tags"
+                                type="text"
+                                isUploadPage={true}
+                                placeholder="spreate tags by ,"
+                                ref={register({ required: true })}
+                            />
+                            <Title>Add Play Time - SEC</Title>
+                            <Input
+                                isUploadPage={true}
+                                name="playTime"
+                                type="number"
+                                placeholder="video play time SEC"
+                                max="30"
+                                min="5"
+                                ref={register({ required: true })}
+                            />
+                            <ConfigButton
+                                isUploadPage={true}
+                                className={`${CONFIG_BTN_STYLE} ${
+                                    !errors ||
+                                    CONFIG_SAFE_BTN_STYLE ||
+                                    CONFIG_ERR_BTN_STYLE
+                                }`}
+                                onClick={updateUploadState}
+                            >
+                                <UploadMain />
+                            </ConfigButton>
+                        </Descriptions>
+                    </Content>
+                ) : (
+                    <Content>
+                        <UploadFile nextStep={upload} />
+                        <Descriptions>
+                            <Title>Title</Title>
+                            <Input
+                                name="thumbnailTitle"
+                                type="text"
+                                isUploadPage={true}
+                                placeholder="thumbnail title here!"
+                                ref={register({ required: true })}
+                            />
+
+                            <ConfigButton
+                                isUploadPage={true}
+                                className={`${CONFIG_BTN_STYLE} ${
+                                    !errors ||
+                                    CONFIG_SAFE_BTN_STYLE ||
+                                    CONFIG_ERR_BTN_STYLE
+                                }`}
+                                onClick={sendData}
+                            >
+                                <UploadMain />
+                            </ConfigButton>
+                        </Descriptions>
+                    </Content>
+                )}
             </InputContainer>
         </Container>
     );
