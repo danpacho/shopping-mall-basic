@@ -111,7 +111,7 @@ function UploadFilePage() {
         setUpload(uploadSuccess);
     };
 
-    const sendData = () => {};
+    const dispatchSaveUserFiles = () => {};
 
     return (
         <Container>
@@ -185,7 +185,7 @@ function UploadFilePage() {
                     <Content>
                         <UploadFile nextStep={upload} />
                         <Descriptions>
-                            <Title>Title</Title>
+                            <Title>Thumbnail Title</Title>
                             <Input
                                 name="thumbnailTitle"
                                 type="text"
@@ -201,7 +201,7 @@ function UploadFilePage() {
                                     CONFIG_SAFE_BTN_STYLE ||
                                     CONFIG_ERR_BTN_STYLE
                                 }`}
-                                onClick={sendData}
+                                onClick={dispatchSaveUserFiles}
                             >
                                 <UploadMain />
                             </ConfigButton>

@@ -22,3 +22,7 @@ export async function sendUserThumbnail(formData, config) {
         payload: request.data,
     };
 }
+
+export async function saveUserFiles() {
+    // const request = await axios.
+}

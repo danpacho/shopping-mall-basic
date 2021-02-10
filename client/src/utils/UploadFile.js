@@ -11,7 +11,6 @@ import { Pdf, Upload } from "../assets/iconComponents";
 //---------------------------------------------------------------
 import { useDispatch } from "react-redux";
 import { sendUserFile, sendUserThumbnail } from "../_action/user_file_action";
-import { set } from "mongoose";
 //---------------------------------------------------------------
 
 const UploadContainer = styled.div`
@@ -26,7 +25,7 @@ const UploadContainer = styled.div`
     align-items: center;
     justify-content: center;
 
-    opacity: 0.3;
+    opacity: 0.5;
     border-right: 0.25px solid black;
 
     &:focus,
@@ -43,7 +42,7 @@ const UploadContainer = styled.div`
 
     background-image: ${(props) =>
         props.isThumbnailPage &&
-        "linear-gradient(to right, #f78ca0 0%, #f9748f 19%, #fd868c 60%, #fe9a8b 100%);"};
+        "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);"};
 `;
 
 const UploadImgContainer = styled.div`
