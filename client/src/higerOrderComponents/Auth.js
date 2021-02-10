@@ -19,8 +19,8 @@ export default function Auth(
     function PaginationUser(url) {
         useEffect(() => {
             const fetchingData = async () => {
-                const { payload } = await dispatch(authUser());
                 //! 로그아웃 상태
+                const { payload } = await dispatch(authUser());
                 if (!payload.isAuth) {
                     if (!beforeLogInPage) url.history.push("/");
                 }

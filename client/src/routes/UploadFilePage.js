@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 //------------------------------------------------
 import { useForm } from "react-hook-form";
 //------------------------------------------------
@@ -17,9 +17,13 @@ import {
     CONFIG_SAFE_BTN_STYLE,
 } from "../utils/ClassName";
 //------------------------------------------------
+import Err from "../utils/Err";
 import { UploadMain } from "../assets/iconComponents";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+//------------------------------------------------
+import { useEffect, useState } from "react";
+//------------------------------------------------
+import { useDispatch, useSelector } from "react-redux";
+import { saveUserFiles } from "../_action/user_file_action";
 //------------------------------------------------
 
 const InputContainer = styled.form`
@@ -57,7 +61,7 @@ const Head = styled.div`
     align-items: center;
     justify-content: left;
 `;
-const Content = styled.div`
+const Content = styled.form`
     width: 100%;
     flex: 10;
     background: white;
@@ -96,22 +100,91 @@ const Title = styled.h1`
 
 //------------------------------------------------
 
-function UploadFilePage() {
-    const { register, handleSubmit, errors, watch } = useForm();
+function UploadFilePage(url) {
+    const dispatch = useDispatch();
+    const { register, handleSubmit } = useForm();
+
+    //! 파일 업로드 state---------------------------------------------
 
     const { uploadSuccess = false } = useSelector((state) => ({
-        uploadSuccess: state.userFileReducer.uploadSuccess,
+        uploadSuccess: state.userFileReducer.uploadSuccess?.uploadSuccess,
     }));
 
-    const [upload, setUpload] = useState(false);
+    const { uploadThumbnailSuccess = false } = useSelector((state) => ({
+        uploadThumbnailSuccess:
+            state.userFileReducer.uploadThumbnailSuccess
+                ?.uploadThumbnailSuccess,
+    }));
 
-    const updateUploadState = (e) => {
+    //! 파일 경로 state-----------------------------------------------
+
+    const { filePath = "" } = useSelector((state) => ({
+        filePath: state.userFileReducer.uploadSuccess?.filePath,
+    }));
+
+    const { thumbnailPath = "" } = useSelector((state) => ({
+        thumbnailPath: state.userFileReducer.uploadThumbnailSuccess?.filePath,
+    }));
+
+    //! 유저 id 정하기
+    const { user } = useSelector((state) => ({
+        user: state.userReducer.userData,
+    }));
+
+    const [userId, setUserId] = useState("");
+
+    useEffect(() => {
+        const setUserIdOnInit = async (user) => {
+            const id = await user._id;
+            setUserId(id);
+        };
+        setUserIdOnInit(user);
+    }, []);
+
+    //----------------------------------------------------------------
+
+    const [upload, setUpload] = useState(false);
+    const [userData, setUserData] = useState({});
+
+    const saveFilePageData = (data, e) => {
         e.preventDefault();
 
         setUpload(uploadSuccess);
+
+        const filePageData = Object.assign(userData, data);
+
+        setUserData(filePageData);
     };
 
-    const dispatchSaveUserFiles = () => {};
+    const saveThumbnailPageData = (data, e) => {
+        e.preventDefault();
+
+        delete data.title;
+
+        let thumbnailPageData = Object.assign(userData, data);
+        thumbnailPageData.filePath = filePath;
+        thumbnailPageData.thumbnailPath = thumbnailPath;
+        thumbnailPageData.writer = userId;
+
+        setUserData(thumbnailPageData);
+
+        dispatchUserFiles(userData);
+    };
+
+    const dispatchUserFiles = async (userData) => {
+        try {
+            const response = await dispatch(saveUserFiles(userData));
+            console.log(response);
+            if (response.payload.uploadComplete) {
+                alert("UPLOAD SUCCESS!");
+                url.history.push("/");
+            } else {
+                alert("ERR OCCURE!");
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     return (
         <Container>
@@ -131,7 +204,7 @@ function UploadFilePage() {
                 </Head>
 
                 {!upload ? (
-                    <Content>
+                    <Content onSubmit={handleSubmit(saveFilePageData)}>
                         <UploadFile nextStep={upload} />
                         <Descriptions>
                             <Title>Title</Title>
@@ -171,18 +244,27 @@ function UploadFilePage() {
                             <ConfigButton
                                 isUploadPage={true}
                                 className={`${CONFIG_BTN_STYLE} ${
-                                    !errors ||
-                                    CONFIG_SAFE_BTN_STYLE ||
-                                    CONFIG_ERR_BTN_STYLE
+                                    !uploadSuccess
+                                        ? CONFIG_ERR_BTN_STYLE
+                                        : CONFIG_SAFE_BTN_STYLE
                                 }`}
-                                onClick={updateUploadState}
+                                onClick={handleSubmit(saveFilePageData)}
                             >
                                 <UploadMain />
                             </ConfigButton>
+                            {!uploadSuccess && (
+                                <Err
+                                    className={
+                                        "mt-4 bg-gray-50 rounded-full shadow"
+                                    }
+                                >
+                                    Upload File 😀
+                                </Err>
+                            )}
                         </Descriptions>
                     </Content>
                 ) : (
-                    <Content>
+                    <Content onSubmit={handleSubmit(saveThumbnailPageData)}>
                         <UploadFile nextStep={upload} />
                         <Descriptions>
                             <Title>Thumbnail Title</Title>
@@ -197,14 +279,23 @@ function UploadFilePage() {
                             <ConfigButton
                                 isUploadPage={true}
                                 className={`${CONFIG_BTN_STYLE} ${
-                                    !errors ||
-                                    CONFIG_SAFE_BTN_STYLE ||
-                                    CONFIG_ERR_BTN_STYLE
+                                    uploadThumbnailSuccess
+                                        ? CONFIG_SAFE_BTN_STYLE
+                                        : CONFIG_ERR_BTN_STYLE
                                 }`}
-                                onClick={dispatchSaveUserFiles}
+                                onClick={handleSubmit(saveThumbnailPageData)}
                             >
                                 <UploadMain />
                             </ConfigButton>
+                            {!uploadThumbnailSuccess && (
+                                <Err
+                                    className={
+                                        "mt-4 bg-gray-50 rounded-full shadow"
+                                    }
+                                >
+                                    Upload Thumbnail 😀
+                                </Err>
+                            )}
                         </Descriptions>
                     </Content>
                 )}
@@ -213,4 +304,4 @@ function UploadFilePage() {
     );
 }
 
-export default UploadFilePage;
+export default withRouter(UploadFilePage);

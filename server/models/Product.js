@@ -16,17 +16,16 @@ const productSchema = mongoose.Schema({
     tags: {
         type: String,
     },
-    files: {
-        type: Array,
-        default: [],
-    },
+
     playTime: {
         type: Number,
         default: 15,
     },
-    thumbnail: {
-        type: Array,
-        defaul: [],
+    filePath: {
+        type: String,
+    },
+    thumbnailPath: {
+        type: String,
     },
     views: {
         type: Number,

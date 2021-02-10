@@ -2,13 +2,14 @@ const express = require("express");
 const router = express.Router();
 //-----------------------------------------------------------------
 const multer = require("multer");
+const { Product } = require("../models/Product");
 //-----------------------------------------------------------------
 const UPLOAD_DIR = "uploads/user_uploads";
 const UPLOAD_THUMBNAIL_DIR = "uploads/user_uploads_thumbnail";
 //-----------------------------------------------------------------
 const FILE_UPLOAD_URL = "/data/file";
 const THUMBNAIL_UPLOAD_URL = "/data/thumbnail";
-//-----------------------------------------------------------------
+//! save file ----------------------------------------------------------------
 
 const dataStorage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -37,7 +38,7 @@ router.post(FILE_UPLOAD_URL, (req, res) => {
     });
 });
 
-//-----------------------------------------------------------------
+//! save thumbnail -----------------------------------------------------------------
 
 const thumbnailStorage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -64,6 +65,17 @@ router.post(THUMBNAIL_UPLOAD_URL, (req, res) => {
     });
 });
 
-//-----------------------------------------------------------------
+//! save total data -----------------------------------------------------------------
+
+router.post("/", (req, res) => {
+    const product = new Product(req.body);
+
+    product.save((err) => {
+        if (err) return res.status(400).json({ uploadComplete: false, err });
+        return res.status(200).json({ uploadComplete: true });
+    });
+});
+
+//----------------------------------------------------------------------------------
 
 module.exports = router;

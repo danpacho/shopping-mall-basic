@@ -16,4 +16,6 @@ export const SEND_USER_FILE = "SEND_USER_FILE";
 
 export const SEND_USER_THUMBNAIL = "SEND_USER_THUMBNAIL";
 
+export const SEND_USER_TOTAL_DATA = "SEND_USER_TOTAL_DATA";
+
 //!-----------------------------------------------------

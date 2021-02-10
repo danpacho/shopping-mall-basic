@@ -86,10 +86,6 @@ function UploadFile({ nextStep }) {
     const [files, setFiles] = useState([]);
     const [thumbnails, setThumbnails] = useState([]);
 
-    useEffect(() => {
-        console.log(nextStep.uploadSuccess);
-    });
-
     const onDropHandler = (files) => {
         const formData = new FormData();
         formData.append("file", files[0]);
@@ -108,7 +104,6 @@ function UploadFile({ nextStep }) {
                 );
 
                 if (fileResponse.payload.uploadSuccess) {
-                    console.log(fileResponse.payload);
                     setFiles([...files, fileResponse.payload.filePath]);
                     setUploadComplete(true);
                 } else {
@@ -121,7 +116,6 @@ function UploadFile({ nextStep }) {
                 );
 
                 if (thumbnailResponse.payload.uploadThumbnailSuccess) {
-                    console.log(thumbnailResponse.payload);
                     setThumbnails([
                         ...thumbnails,
                         thumbnailResponse.payload.filePath,
@@ -137,7 +131,7 @@ function UploadFile({ nextStep }) {
         }
     };
 
-    return !nextStep.uploadSuccess ? (
+    return !nextStep ? (
         <Dropzone onDrop={onDropHandler}>
             {({ getRootProps, getInputProps }) => (
                 <>
