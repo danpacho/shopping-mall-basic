@@ -1,6 +1,6 @@
 import * as React from "react";
 
-function SvgDownlaodMain(props) {
+function DownlaodMain(props) {
     return (
         <svg
             width="1em"
@@ -28,4 +28,4 @@ function SvgDownlaodMain(props) {
     );
 }
 
-export default SvgDownlaodMain;
+export default DownlaodMain;

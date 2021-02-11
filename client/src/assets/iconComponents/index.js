@@ -19,3 +19,4 @@ export { default as Star } from "./Star";
 export { default as Upload } from "./Upload";
 export { default as DownlaodMain } from "./DownlaodMain";
 export { default as UploadMain } from "./UploadMain";
+export { default as AddToCart } from "./AddToCart";

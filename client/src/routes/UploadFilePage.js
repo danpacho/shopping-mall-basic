@@ -137,7 +137,7 @@ function UploadFilePage(url) {
 
     useEffect(() => {
         const setUserIdOnInit = async (user) => {
-            const id = await user._id;
+            const id = await user?._id;
             setUserId(id);
         };
         setUserIdOnInit(user);
@@ -161,16 +161,19 @@ function UploadFilePage(url) {
     const saveThumbnailPageData = (data, e) => {
         e.preventDefault();
 
-        delete data.title;
+        if (uploadThumbnailSuccess) {
+            delete data.title;
 
-        let thumbnailPageData = Object.assign(userData, data);
-        thumbnailPageData.filePath = filePath;
-        thumbnailPageData.thumbnailPath = thumbnailPath;
-        thumbnailPageData.writer = userId;
+            let thumbnailPageData = Object.assign(userData, data);
+            thumbnailPageData.filePath = filePath;
+            thumbnailPageData.thumbnailPath = thumbnailPath;
+            thumbnailPageData.writer = userId;
+            console.log(userId);
 
-        setUserData(thumbnailPageData);
+            setUserData(thumbnailPageData);
 
-        dispatchUserFiles(userData);
+            dispatchUserFiles(userData);
+        }
     };
 
     const dispatchUserFiles = async (userData) => {
