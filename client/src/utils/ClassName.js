@@ -17,3 +17,6 @@ export const CONFIG_SAFE_BTN_STYLE =
 
 export const CONFIG_ERR_BTN_STYLE =
     "hover:bg-red-500 focus:ring-2 focus:ring-red-300";
+
+//! UploadPage
+export const TAG_STYLE = "bg-gray-50 rounded-full shadow";

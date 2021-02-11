@@ -19,6 +19,7 @@ import {
     ArrowDown,
     UploadMain,
 } from "../assets/iconComponents";
+import LandingPage from "../components/LandingPage";
 //-------------------------------------------------------------
 
 const Button = styled.button`
@@ -85,7 +86,7 @@ const ProfileBtn = styled.button`
 const PROFILE_STYLE = "rounded-full shadow-sm border hover:shadow-lg";
 //-------------------------------------------------------------
 
-function LandingPage() {
+function HomePage() {
     const dispatch = useDispatch();
     const [nickName, setNickName] = useState("");
     const [display, setDisplay] = useState(false);
@@ -174,8 +175,9 @@ function LandingPage() {
                     </>
                 )}
             </Header>
+            <LandingPage />
         </Container>
     );
 }
 
-export default withRouter(LandingPage);
+export default withRouter(HomePage);

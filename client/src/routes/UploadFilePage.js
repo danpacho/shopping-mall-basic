@@ -1,6 +1,3 @@
-import { Link, withRouter } from "react-router-dom";
-//------------------------------------------------
-import { useForm } from "react-hook-form";
 //------------------------------------------------
 import styled from "styled-components";
 //------------------------------------------------
@@ -10,20 +7,25 @@ import MainLogo from "../utils/MainLogo";
 import Input from "../utils/Input";
 import ConfigButton from "../utils/ConfigButton";
 import UploadFile from "../utils/UploadFile";
+import Err from "../utils/Err";
 //------------------------------------------------
 import {
     CONFIG_BTN_STYLE,
     CONFIG_ERR_BTN_STYLE,
     CONFIG_SAFE_BTN_STYLE,
+    TAG_STYLE,
 } from "../utils/ClassName";
 //------------------------------------------------
-import Err from "../utils/Err";
 import { UploadMain } from "../assets/iconComponents";
-//------------------------------------------------
+//!------------------------------------------------
 import { useEffect, useState } from "react";
 //------------------------------------------------
 import { useDispatch, useSelector } from "react-redux";
 import { saveUserFiles } from "../_action/user_file_action";
+//------------------------------------------------
+import { Link, withRouter } from "react-router-dom";
+//------------------------------------------------
+import { useForm } from "react-hook-form";
 //------------------------------------------------
 
 const InputContainer = styled.form`
@@ -174,14 +176,14 @@ function UploadFilePage(url) {
     const dispatchUserFiles = async (userData) => {
         try {
             const response = await dispatch(saveUserFiles(userData));
-            console.log(response);
             if (response.payload.uploadComplete) {
                 alert("UPLOAD SUCCESS!");
                 url.history.push("/");
             } else {
-                alert("ERR OCCURE!");
+                alert("ERR OCCURED!");
             }
         } catch (err) {
+            alert("ERR OCCURED!");
             console.log(err);
         }
     };
@@ -253,11 +255,7 @@ function UploadFilePage(url) {
                                 <UploadMain />
                             </ConfigButton>
                             {!uploadSuccess && (
-                                <Err
-                                    className={
-                                        "mt-4 bg-gray-50 rounded-full shadow"
-                                    }
-                                >
+                                <Err isUploadPage={true} className={TAG_STYLE}>
                                     Upload File 😀
                                 </Err>
                             )}
@@ -288,11 +286,7 @@ function UploadFilePage(url) {
                                 <UploadMain />
                             </ConfigButton>
                             {!uploadThumbnailSuccess && (
-                                <Err
-                                    className={
-                                        "mt-4 bg-gray-50 rounded-full shadow"
-                                    }
-                                >
+                                <Err isUploadPage={true} className={TAG_STYLE}>
                                     Upload Thumbnail 😀
                                 </Err>
                             )}

@@ -5,13 +5,30 @@ const Err = styled.p`
     font-size: 1rem;
 
     width: 250px;
-    text-align: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 
     ${(props) =>
         props.isAccountPage &&
         css`
             width: 12rem;
             text-align: left;
+        `}
+    ${(props) =>
+        props.isUploadPage &&
+        css`
+            width: 45%;
+            height: 30px;
+
+            margin-top: 1rem;
         `}
 `;
 

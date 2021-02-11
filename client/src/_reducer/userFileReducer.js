@@ -2,6 +2,7 @@ import {
     SEND_USER_FILE,
     SEND_USER_THUMBNAIL,
     SEND_USER_TOTAL_DATA,
+    GET_USERS_PRODUCT_DATA,
 } from "../_action/types";
 
 export default function userFileReducer(state, action) {
@@ -12,6 +13,8 @@ export default function userFileReducer(state, action) {
             return { ...state, uploadThumbnailSuccess: action.payload };
         case SEND_USER_TOTAL_DATA:
             return { ...state, uploadComplete: action.payload };
+        case GET_USERS_PRODUCT_DATA:
+            return { ...state, getProductsSuccess: action.payload };
         default:
             return "";
     }

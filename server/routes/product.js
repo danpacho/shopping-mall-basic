@@ -76,6 +76,19 @@ router.post("/", (req, res) => {
     });
 });
 
+//! post total products -----------------------------------------------------------------
+
+router.post("/products", (req, res) => {
+    Product.find()
+        .populate("writer")
+        //! populate 메서드로 product 속 writer의 정보도 User Model 에서 가져옴.
+        .exec((err, productInfo) => {
+            if (err) res.status(400).json({ getProductsSuccess: false, err });
+
+            res.status(200).json({ getProductsSuccess: true, productInfo });
+        });
+});
+
 //----------------------------------------------------------------------------------
 
 module.exports = router;

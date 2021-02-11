@@ -19,3 +19,5 @@ export const SEND_USER_THUMBNAIL = "SEND_USER_THUMBNAIL";
 export const SEND_USER_TOTAL_DATA = "SEND_USER_TOTAL_DATA";
 
 //!-----------------------------------------------------
+
+export const GET_USERS_PRODUCT_DATA = "GET_USERS_PRODUCT_DATA";
