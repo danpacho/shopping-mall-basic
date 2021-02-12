@@ -1,9 +1,7 @@
 //---------------------------------------------------------------
 import Dropzone from "react-dropzone";
 //---------------------------------------------------------------
-import axios from "axios";
-//---------------------------------------------------------------
-import { useEffect, useState } from "react";
+import { useState } from "react";
 //---------------------------------------------------------------
 import styled from "styled-components";
 //---------------------------------------------------------------
@@ -11,6 +9,8 @@ import { Pdf, Upload } from "../assets/iconComponents";
 //---------------------------------------------------------------
 import { useDispatch } from "react-redux";
 import { sendUserFile, sendUserThumbnail } from "../_action/user_file_action";
+
+import useNotificationBar from "./hooks/useNotificationMessage";
 //---------------------------------------------------------------
 
 const UploadContainer = styled.div`
@@ -83,6 +83,8 @@ function UploadFile({ nextStep }) {
         false
     );
 
+    const uploadSuccessNotification = useNotificationBar("Upload Success!");
+
     const [files, setFiles] = useState([]);
     const [thumbnails, setThumbnails] = useState([]);
 
@@ -146,6 +148,7 @@ function UploadFile({ nextStep }) {
                     ) : (
                         files.map((file) => (
                             <UploadImgContainer key={file}>
+                                {uploadSuccessNotification}
                                 {file.includes("pdf", 1) ? (
                                     <Pdf
                                         width={"5em"}
@@ -179,6 +182,7 @@ function UploadFile({ nextStep }) {
                     ) : (
                         thumbnails.map((thumbnail) => (
                             <UploadImgContainer key={thumbnail}>
+                                {uploadSuccessNotification}
                                 <UploadedImg
                                     src={`http://localhost:5000/${thumbnail}`}
                                 />

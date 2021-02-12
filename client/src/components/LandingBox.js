@@ -5,7 +5,7 @@ import { AddToCart, Heart } from "../assets/iconComponents/index";
 import background from "../assets/images/BlurMask.png";
 
 const BoxModel = styled.div`
-    transition: all ease-in-out 0.25s;
+    transition: all ease-out 0.5s;
 
     display: flex;
     align-items: center;
@@ -23,7 +23,7 @@ const BoxModel = styled.div`
     color: #262626;
 
     &:hover {
-        transform: translateY(-0.25rem);
+        transform: translateY(-0.5rem);
     }
 `;
 
@@ -127,7 +127,7 @@ function LandingBox({ product }) {
         <BoxModel
             background={background}
             className={
-                "container border-opacity-25 border-green-200 border-solid border-2 rounded shadow-sm hover:shadow"
+                "container border-opacity-25 border-green-200 border-solid border-2 rounded shadow-sm hover:shadow-md"
             }
         >
             <Title className={"mt-4 text-xl"}>{title}</Title>

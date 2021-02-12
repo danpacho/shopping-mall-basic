@@ -8,7 +8,7 @@ const NavContainer = styled.div`
     right: 0;
 
     width: 10rem;
-    height: fit-content;
+    height: auto;
 
     display: flex;
     align-items: center;
@@ -16,11 +16,12 @@ const NavContainer = styled.div`
     flex-direction: column;
 
     background-image: linear-gradient(160deg, #fdfbfb 0%, #ebedee 100%);
+    border-radius: 0.5rem;
 
     display: none;
 
     ${(props) =>
-        props.isClicked &&
+        props.toggle &&
         css`
             display: block;
         `}
@@ -62,14 +63,17 @@ const NavBtn = styled.button`
         background: black;
         color: whitesmoke;
     }
+    &:first-child {
+        border-radius: 0.5rem 0.5rem 0 0;
+    }
     &:last-child {
         border-radius: 0 0 0.5rem 0.5rem;
     }
 `;
 
-function NavBar({ display, handleLogOut }) {
+function NavBar({ toggle, handleLogOut }) {
     return (
-        <NavContainer isClicked={display} className={"shadow-md"}>
+        <NavContainer toggle={toggle} className={"shadow-md"}>
             <NavBtn onClick={handleLogOut}>
                 <Link to="/">logout</Link>
                 <Logout />

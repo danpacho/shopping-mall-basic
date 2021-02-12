@@ -18,7 +18,7 @@ const Header = styled.header`
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 
-    z-index: 10;
+    z-index: 5;
 `;
 
 export default Header;

@@ -104,6 +104,7 @@ const Title = styled.h1`
 
 function UploadFilePage(url) {
     const dispatch = useDispatch();
+
     const { register, handleSubmit } = useForm();
 
     //! 파일 업로드 state---------------------------------------------
@@ -128,7 +129,7 @@ function UploadFilePage(url) {
         thumbnailPath: state.userFileReducer.uploadThumbnailSuccess?.filePath,
     }));
 
-    //! 유저 id 정하기
+    //! 유저 id 정하기-------------------------------------------------
     const { user } = useSelector((state) => ({
         user: state.userReducer.userData,
     }));
@@ -136,8 +137,8 @@ function UploadFilePage(url) {
     const [userId, setUserId] = useState("");
 
     useEffect(() => {
-        const setUserIdOnInit = async (user) => {
-            const id = await user?._id;
+        const setUserIdOnInit = (user) => {
+            const id = user?._id;
             setUserId(id);
         };
         setUserIdOnInit(user);
@@ -145,13 +146,13 @@ function UploadFilePage(url) {
 
     //----------------------------------------------------------------
 
-    const [upload, setUpload] = useState(false);
+    const [nextStep, setNextStep] = useState(false);
     const [userData, setUserData] = useState({});
 
     const saveFilePageData = (data, e) => {
         e.preventDefault();
 
-        setUpload(uploadSuccess);
+        setNextStep(uploadSuccess);
 
         const filePageData = Object.assign(userData, data);
 
@@ -168,7 +169,6 @@ function UploadFilePage(url) {
             thumbnailPageData.filePath = filePath;
             thumbnailPageData.thumbnailPath = thumbnailPath;
             thumbnailPageData.writer = userId;
-            console.log(userId);
 
             setUserData(thumbnailPageData);
 
@@ -180,7 +180,6 @@ function UploadFilePage(url) {
         try {
             const response = await dispatch(saveUserFiles(userData));
             if (response.payload.uploadComplete) {
-                alert("UPLOAD SUCCESS!");
                 url.history.push("/");
             } else {
                 alert("ERR OCCURED!");
@@ -202,15 +201,15 @@ function UploadFilePage(url) {
             <InputContainer isUploadPage={true} className={"rounded shadow"}>
                 <Head>
                     <MainLogo isUploadPage={true}>
-                        {!upload
+                        {!nextStep
                             ? "Step1 - Share Your File "
                             : "Step2 - Set Thumbnail"}
                     </MainLogo>
                 </Head>
 
-                {!upload ? (
+                {!nextStep ? (
                     <Content onSubmit={handleSubmit(saveFilePageData)}>
-                        <UploadFile nextStep={upload} />
+                        <UploadFile nextStep={nextStep} />
                         <Descriptions>
                             <Title>Title</Title>
                             <Input
@@ -266,7 +265,7 @@ function UploadFilePage(url) {
                     </Content>
                 ) : (
                     <Content onSubmit={handleSubmit(saveThumbnailPageData)}>
-                        <UploadFile nextStep={upload} />
+                        <UploadFile nextStep={nextStep} />
                         <Descriptions>
                             <Title>Thumbnail Title</Title>
                             <Input

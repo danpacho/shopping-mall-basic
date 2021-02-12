@@ -10,7 +10,9 @@ import LandingBox from "./LandingBox";
 
 const BoxContainer = styled.div`
     width: 90%;
-    height: 90%;
+    height: fit-content;
+
+    padding-bottom: 3rem;
 
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));

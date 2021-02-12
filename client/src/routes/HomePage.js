@@ -20,6 +20,9 @@ import {
     UploadMain,
 } from "../assets/iconComponents";
 import LandingPage from "../components/LandingPage";
+import useToggleBar from "../utils/hooks/useToggleBar";
+import { ToastContainer } from "react-toastify";
+import useNotificationBar from "../utils/hooks/useNotificationMessage";
 //-------------------------------------------------------------
 
 const Button = styled.button`
@@ -88,37 +91,21 @@ const PROFILE_STYLE = "rounded-full shadow-sm border hover:shadow-lg";
 
 function HomePage() {
     const dispatch = useDispatch();
-    const [nickName, setNickName] = useState("");
-    const [display, setDisplay] = useState(false);
-    const [login, setLogin] = useState(false);
 
-    const onClick = (arg) => {
-        setDisplay(!arg);
-    };
+    const [toggleBar, toggle] = useToggleBar();
+
+    //! 유저 정보 가져오기 -------------------------------------------------
+
     const { userData = false } = useSelector((state) => ({
         userData: state.userReducer.userData,
     }));
 
+    //-----------------------------------------------------------------------
     const handleLogOut = () => {
         dispatch(logoutUser);
         window.location.reload();
     };
-
-    useEffect(() => {
-        setLogin(userData.isAuth);
-        const getUserName = (isLogIn) => {
-            if (isLogIn) {
-                const { name } = userData;
-                return name;
-            }
-        };
-        const name = getUserName(userData.isAuth);
-        if (name === undefined) {
-            setNickName("😎");
-        } else {
-            setNickName(name);
-        }
-    }, [userData]);
+    //-----------------------------------------------------------------------
 
     return (
         <Container>
@@ -126,9 +113,9 @@ function HomePage() {
                 <MainLogo isMainPage={true}>
                     <Link to="/">Note Share</Link>
                 </MainLogo>
-
-                {login && (
+                {userData?.isAuth && (
                     <>
+                        {/* //! 업로드 버튼 */}
                         <Link to="upload">
                             <Button
                                 className={`${BTN_STYLE} focus:ring-gray-400 `}
@@ -137,6 +124,7 @@ function HomePage() {
                                 <UploadMain />
                             </Button>
                         </Link>
+                        {/* //! 프로필 버튼 */}
                         <div
                             className={
                                 "flex flex-row justify-between items-center mr-4"
@@ -144,16 +132,16 @@ function HomePage() {
                         >
                             <ProfileBtn
                                 className={`${PROFILE_STYLE} select-none`}
-                                onClick={() => onClick(display)}
+                                onClick={() => toggleBar(toggle)}
                             >
-                                {nickName}
+                                {userData?.name}
                             </ProfileBtn>
                             <ArrowDown />
                         </div>
-                        <NavBar display={display} handleLogOut={handleLogOut} />
+                        <NavBar toggle={toggle} handleLogOut={handleLogOut} />
                     </>
                 )}
-                {!login && (
+                {!userData?.isAuth && (
                     <>
                         <Link to="/login">
                             <Button
