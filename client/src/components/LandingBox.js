@@ -15,6 +15,8 @@ const BoxModel = styled.div`
     width: 20rem;
     height: 25rem;
 
+    margin-bottom: 0.5rem;
+
     background-image: ${(props) => props.background};
     background-repeat: no-repeat;
     background-position: center;
@@ -84,6 +86,13 @@ const Tag = styled.li`
 `;
 
 const Title = styled.h1`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 2.5rem;
+
     font-family: "Do Hyeon", sans-serif;
     font-size: 1.25rem;
 `;
@@ -127,15 +136,15 @@ function LandingBox({ product }) {
         <BoxModel
             background={background}
             className={
-                "container border-opacity-25 border-green-200 border-solid border-2 rounded shadow-sm hover:shadow-md"
+                "container rounded shadow-sm hover:shadow border-gray-300 border-2"
             }
         >
-            <Title className={"mt-4 text-xl"}>{title}</Title>
+            <Title className={"bg-gray-50"}>{title}</Title>
             <BackgroundImg
                 src={`http://localhost:5000/${thumbnailPath}`}
                 alt="img"
             />
-            <Contents className={"bg-gray-100"}>
+            <Contents className={"bg-gray-50 border-gray-300 border-t-2"}>
                 <Tags>
                     {newTags.map((tag, idx) => (
                         <Tag className={TAG_STYLE} key={idx}>

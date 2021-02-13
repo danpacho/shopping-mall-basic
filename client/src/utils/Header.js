@@ -5,7 +5,7 @@ const Header = styled.header`
     top: 0;
 
     width: 100%;
-    height: 4.5rem;
+    height: 3.5rem;
 
     display: flex;
     flex-direction: row;

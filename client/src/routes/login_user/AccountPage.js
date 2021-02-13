@@ -29,6 +29,8 @@ import {
     CONFIG_SUCCESS_STYLE,
 } from "../../utils/ClassName";
 import ConfigButton from "../../utils/ConfigButton";
+import useToggleBar from "../../utils/hooks/useToggleBar";
+import useNotificationBar from "../../utils/hooks/useNotificationMessage";
 //--------------------------------------------------
 
 const UserConfigContainer = styled.div`
@@ -89,7 +91,7 @@ const List = styled.li`
                 color: #03a678;
             }
         `}
-    display:${(props) => props.display && "none"};
+    display:${(props) => props.toggle && "none"};
 `;
 
 //--------------------------------------------------
@@ -97,7 +99,9 @@ const List = styled.li`
 function AccountPage() {
     const dispatch = useDispatch();
 
-    const [display, setDisplay] = useState(false);
+    const [toggleBar, toggle] = useToggleBar();
+    const uploadSuccessNotification = useNotificationBar("Update Success!");
+
     const [userInfo, setUserInfo] = useState({});
     const [update, setUpdate] = useState(0);
 
@@ -118,9 +122,9 @@ function AccountPage() {
 
     let nickNameLength = watch("nickName", "").length;
 
-    const handleUserInputChange = (arg) => {
+    const handleUserInputChange = () => {
         if (nickNameLength <= 10) {
-            setDisplay(!arg);
+            toggleBar(toggle);
             setUpdate(0);
 
             //! 유저가 입력한 경우
@@ -132,14 +136,15 @@ function AccountPage() {
 
                 if (userInfo.name !== newName.name) {
                     setUserInfo({ ...newName });
-                    updateUserInfo(newName);
+                    dispatchUpdateUserInfo(newName);
                 }
             }
         }
     };
 
-    const updateUserInfo = async (newName) => {
+    const dispatchUpdateUserInfo = async (newName) => {
         const response = await dispatch(modifyingUser(newName));
+        console.log(response);
         if (response.payload.updateSuccess) {
             setUpdate(1);
         }
@@ -168,18 +173,18 @@ function AccountPage() {
                                     ? CONFIG_SAFE_BTN_STYLE
                                     : CONFIG_ERR_BTN_STYLE
                             }   `}
-                            onClick={() => handleUserInputChange(display)}
+                            onClick={handleUserInputChange}
                         >
-                            {!display && "변경"}
-                            {display && nickNameLength <= 10 && "확정"}
-                            {display && nickNameLength > 10 && "초과"}
+                            {!toggle && "변경"}
+                            {toggle && nickNameLength <= 10 && "확정"}
+                            {toggle && nickNameLength > 10 && "초과"}
                         </ConfigButton>
                     </List>
-                    <List isConfig={true} display={display}>
+                    <List isConfig={true} toggle={toggle}>
                         {userInfo?.name}
                     </List>
 
-                    <List display={!display}>
+                    <List toggle={!toggle}>
                         <Input
                             isAccountPage={true}
                             name="nickName"
@@ -206,18 +211,11 @@ function AccountPage() {
                                 max nick name length is 10
                             </Err>
                         )}
-                        {update === 1 && (
-                            <Err
-                                isAccountPage={true}
-                                className={CONFIG_SUCCESS_STYLE}
-                            >
-                                Update Success 😎
-                            </Err>
-                        )}
                     </List>
 
                     <List isTitle={true}>이메일</List>
                     <List isConfig={true}>{userInfo?.email}</List>
+                    {update === 1 && uploadSuccessNotification}
                 </UserConfigLists>
             </UserConfigContainer>
         </Container>

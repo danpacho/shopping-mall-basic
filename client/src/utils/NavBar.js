@@ -10,6 +10,8 @@ const NavContainer = styled.div`
     width: 10rem;
     height: auto;
 
+    margin-right: 1rem;
+
     display: flex;
     align-items: center;
     justify-content: center;

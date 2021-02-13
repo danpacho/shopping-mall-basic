@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 //-------------------------------------------------------------
 import styled from "styled-components";
 //-------------------------------------------------------------
@@ -19,10 +18,10 @@ import {
     ArrowDown,
     UploadMain,
 } from "../assets/iconComponents";
+//-------------------------------------------------------------
 import LandingPage from "../components/LandingPage";
+//-------------------------------------------------------------
 import useToggleBar from "../utils/hooks/useToggleBar";
-import { ToastContainer } from "react-toastify";
-import useNotificationBar from "../utils/hooks/useNotificationMessage";
 //-------------------------------------------------------------
 
 const Button = styled.button`
@@ -101,9 +100,14 @@ function HomePage() {
     }));
 
     //-----------------------------------------------------------------------
-    const handleLogOut = () => {
-        dispatch(logoutUser);
-        window.location.reload();
+    const handleLogOut = async () => {
+        const response = await dispatch(logoutUser);
+
+        if (response.payload.logoutSuccess) {
+            window.location.reload();
+        } else {
+            alert("fail");
+        }
     };
     //-----------------------------------------------------------------------
 

@@ -8,7 +8,7 @@ import Home from "../routes/HomePage";
 import Login from "../routes/LoginPage";
 import Register from "../routes/RegisterPage";
 import Setting from "../routes/login_user/SettingPage";
-import UploadFile from "../routes/UploadFilePage";
+import UploadFile from "../routes/login_user/UploadFilePage";
 
 function App() {
     return (
