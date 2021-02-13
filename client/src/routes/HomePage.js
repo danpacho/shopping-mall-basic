@@ -112,7 +112,7 @@ function HomePage() {
     //-----------------------------------------------------------------------
 
     return (
-        <Container>
+        <Container isMainPage={true}>
             <Header>
                 <MainLogo isMainPage={true}>
                     <Link to="/">Note Share</Link>

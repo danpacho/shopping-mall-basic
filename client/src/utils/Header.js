@@ -14,9 +14,9 @@ const Header = styled.header`
 
     border-bottom: 1px solid #0d0d0d;
 
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
 
     z-index: 5;
 `;
