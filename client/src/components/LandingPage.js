@@ -1,10 +1,5 @@
 import styled from "styled-components";
 //-------------------------------------------------------------------
-import React, { useMemo, useState } from "react";
-//-------------------------------------------------------------------
-import { useDispatch } from "react-redux";
-import { getUserFiles } from "../_action/get_user_files_action";
-//-------------------------------------------------------------------
 import LandingBox from "./LandingBox";
 //-------------------------------------------------------------------
 
@@ -22,21 +17,7 @@ const BoxContainer = styled.div`
 
 //-------------------------------------------------------------------
 
-function LandingPage() {
-    const dispatch = useDispatch();
-
-    const [products, setProducts] = useState([]);
-
-    useMemo(() => {
-        const dispatchProducts = async () => {
-            const response = await dispatch(getUserFiles);
-            if (response.payload.getProductsSuccess) {
-                setProducts(response.payload.productInfo);
-            }
-        };
-        dispatchProducts();
-    }, [dispatch]);
-
+function LandingPage({ products }) {
     return (
         <BoxContainer className={"mt-8"}>
             {products &&

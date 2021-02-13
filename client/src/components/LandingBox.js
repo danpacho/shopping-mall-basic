@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import styled, { css } from "styled-components";
-import { TAG_STYLE } from "../utils/ClassName";
+import { BOX_DEFAULT_STYLE, TAG_STYLE } from "../utils/ClassName";
 import { AddToCart, Heart } from "../assets/iconComponents/index";
 import background from "../assets/images/BlurMask.png";
 
@@ -16,6 +16,8 @@ const BoxModel = styled.div`
     height: 25rem;
 
     margin-bottom: 0.5rem;
+
+    border-width: 0.1rem;
 
     background-image: ${(props) => props.background};
     background-repeat: no-repeat;
@@ -118,6 +120,7 @@ const BackgroundImg = styled.img`
         opacity: 0.9;
     }
 `;
+
 //---------------------------------------------------------------
 
 function LandingBox({ product }) {
@@ -136,7 +139,7 @@ function LandingBox({ product }) {
         <BoxModel
             background={background}
             className={
-                "container rounded shadow-sm hover:shadow border-gray-300 border-2"
+                "container rounded shadow-sm hover:shadow border-gray-300"
             }
         >
             <Title className={"bg-gray-50"}>{title}</Title>
@@ -144,7 +147,7 @@ function LandingBox({ product }) {
                 src={`http://localhost:5000/${thumbnailPath}`}
                 alt="img"
             />
-            <Contents className={"bg-gray-50 border-gray-300 border-t-2"}>
+            <Contents className={BOX_DEFAULT_STYLE}>
                 <Tags>
                     {newTags.map((tag, idx) => (
                         <Tag className={TAG_STYLE} key={idx}>

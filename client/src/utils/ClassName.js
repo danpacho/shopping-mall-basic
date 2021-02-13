@@ -9,6 +9,9 @@ export const ERR_INPUT_STYLE = "focus:ring-opacity-80 focus:ring-red-500";
 export const ERR_TEXT_STYLE = "text-opacity-90 text-red-500";
 
 export const CONFIG_SUCCESS_STYLE = "text-opacity-90 text-green-600";
+
+export const BOX_DEFAULT_STYLE = "bg-gray-50 border-gray-300";
+
 //! AccountPage
 export const CONFIG_BTN_STYLE = "rounded shadow hover:shadow-lg";
 

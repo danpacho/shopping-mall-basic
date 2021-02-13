@@ -23,7 +23,7 @@ const Container = styled.div`
         css`
             justify-content: center;
             background-image: linear-gradient(to top, #c1dfc4 0%, #deecdd 100%);
-        `}
+        `}+
 `;
 
 export default Container;

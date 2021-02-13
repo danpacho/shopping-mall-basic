@@ -26,25 +26,29 @@ import {
     CONFIG_BTN_STYLE,
     CONFIG_ERR_BTN_STYLE,
     CONFIG_SAFE_BTN_STYLE,
-    CONFIG_SUCCESS_STYLE,
+    BOX_DEFAULT_STYLE,
 } from "../../utils/ClassName";
+//--------------------------------------------------
 import ConfigButton from "../../utils/ConfigButton";
 import useToggleBar from "../../utils/hooks/useToggleBar";
 import useNotificationBar from "../../utils/hooks/useNotificationMessage";
+import useProductsInfo from "../../utils/hooks/useProductsInfo";
+import LandingPage from "../../components/LandingPage";
 //--------------------------------------------------
 
 const UserConfigContainer = styled.div`
     width: 60%;
-    height: 300px;
-    margin-top: 2.5rem;
+    height: 30%;
+
+    margin: 1rem 0;
+    padding: 1.5rem 0;
 
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
 
-    background-image: linear-gradient(to top, #c1dfc4 0%, #deecdd 100%);
-    background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+    border-width: 0.1rem;
 `;
 
 const ImageContainer = styled.div`
@@ -99,8 +103,10 @@ const List = styled.li`
 function AccountPage() {
     const dispatch = useDispatch();
 
+    //! HOOKS
     const [toggleBar, toggle] = useToggleBar();
     const uploadSuccessNotification = useNotificationBar("Update Success!");
+    const products = useProductsInfo();
 
     const [userInfo, setUserInfo] = useState({});
     const [update, setUpdate] = useState(0);
@@ -118,6 +124,16 @@ function AccountPage() {
         setUserData(userData);
     }, [userData]);
 
+    //! product filter
+    const filteringProducts = (products) => {
+        return products.filter(
+            (product) => product?.writer?._id === userData?._id
+        );
+    };
+
+    const filterdProducts = filteringProducts(products);
+
+    //! form handle
     const { register, watch, getValues } = useForm();
 
     let nickNameLength = watch("nickName", "").length;
@@ -157,7 +173,10 @@ function AccountPage() {
                     <Link to="/">Note Share</Link>
                 </MainLogo>
             </Header>
-            <UserConfigContainer className={"shadow-md rounded"}>
+
+            <UserConfigContainer
+                className={`${BOX_DEFAULT_STYLE} shadow-sm rounded-sm`}
+            >
                 <ImageContainer>
                     <UserDemo />
                     <ConfigButton className={CONFIG_BTN_STYLE}>
@@ -218,6 +237,10 @@ function AccountPage() {
                     {update === 1 && uploadSuccessNotification}
                 </UserConfigLists>
             </UserConfigContainer>
+
+            <MainLogo isAccountPage={true}>Your Attribution</MainLogo>
+
+            <LandingPage products={filterdProducts} />
         </Container>
     );
 }

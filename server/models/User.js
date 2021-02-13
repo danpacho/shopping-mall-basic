@@ -33,8 +33,10 @@ const userSchema = mongoose.Schema({
         default: 0,
     },
     //관리자 혹은 유저인지 확인
-    image: String,
-
+    userImagePath: {
+        type: String,
+        default: "",
+    },
     //토큰 발행과 토큰 유효기간
     token: {
         type: String,

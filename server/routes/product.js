@@ -89,6 +89,34 @@ router.post("/products", (req, res) => {
         });
 });
 
+//! modify products LIKE -----------------------------------------------------------------
+
+router.patch("/products/like", (req, res) => {
+    const { _id, like } = req.body;
+
+    Product.findOneAndUpdate(
+        {
+            _id: _id,
+        },
+        {
+            $set: {
+                like: like,
+            },
+        },
+        {
+            new: true,
+        },
+
+        (err, user) => {
+            if (err) return res.json({ update: false, err });
+
+            return res.status(200).send({
+                updateSuccess: true,
+            });
+        }
+    );
+});
+
 //----------------------------------------------------------------------------------
 
 module.exports = router;

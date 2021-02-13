@@ -22,6 +22,7 @@ import {
 import LandingPage from "../components/LandingPage";
 //-------------------------------------------------------------
 import useToggleBar from "../utils/hooks/useToggleBar";
+import useProductsInfo from "../utils/hooks/useProductsInfo";
 //-------------------------------------------------------------
 
 const Button = styled.button`
@@ -92,6 +93,7 @@ function HomePage() {
     const dispatch = useDispatch();
 
     const [toggleBar, toggle] = useToggleBar();
+    const products = useProductsInfo();
 
     //! 유저 정보 가져오기 -------------------------------------------------
 
@@ -167,7 +169,7 @@ function HomePage() {
                     </>
                 )}
             </Header>
-            <LandingPage />
+            <LandingPage products={products} />
         </Container>
     );
 }

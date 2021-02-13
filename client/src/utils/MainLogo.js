@@ -20,6 +20,13 @@ const MainLogo = styled.h1`
         css`
             font-size: 2rem;
         `}
+    ${(props) =>
+        props.isAccountPage &&
+        css`
+            margin: 0;
+            margin-top: 0.5rem;
+            font-size: 1.5rem;
+        `}
 `;
 
 export default MainLogo;
