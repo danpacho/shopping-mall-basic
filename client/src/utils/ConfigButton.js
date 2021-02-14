@@ -3,6 +3,7 @@ const ConfigButton = styled.button`
     transition: all ease-out 0.1s;
 
     width: 5rem;
+    width: ${(props) => props.isUpload && "7.5rem"};
 
     color: whitesmoke;
     background: #0d0d0d;

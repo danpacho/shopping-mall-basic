@@ -15,6 +15,7 @@ export default function userFileReducer(state, action) {
             return { ...state, uploadComplete: action.payload };
         case GET_USERS_PRODUCT_DATA:
             return { ...state, getProductsSuccess: action.payload };
+
         default:
             return "";
     }

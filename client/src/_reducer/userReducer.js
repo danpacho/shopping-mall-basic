@@ -4,6 +4,8 @@ import {
     MODIFYING_USER,
     REGISTER_USER,
     TYPE_USER,
+    SEND_USER_PROFILE,
+    SEND_USER_NAME,
 } from "../_action/types";
 
 export default function userReducer(state, action) {
@@ -16,8 +18,10 @@ export default function userReducer(state, action) {
             return { ...state, logoutSuccess: action.payload };
         case AUTH_USER:
             return { ...state, userData: action.payload };
-        case MODIFYING_USER:
-            return { ...state, updateSuccess: action.payload };
+        case SEND_USER_NAME:
+            return { ...state, uploadNameSuccess: action.payload };
+        case SEND_USER_PROFILE:
+            return { ...state, uploadProfileSuccess: action.payload };
         default:
             return "";
     }

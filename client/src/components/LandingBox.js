@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styled, { css } from "styled-components";
 import { BOX_DEFAULT_STYLE, TAG_STYLE } from "../utils/ClassName";
 import { AddToCart, Heart } from "../assets/iconComponents/index";
@@ -68,10 +68,13 @@ const Tag = styled.li`
         props.isInteraction &&
         css`
             border: none;
+
             font-weight: 400;
+            color: "#BFBFBF";
 
             padding: 0;
             margin: 0.5rem;
+
             &:hover {
                 background: transparent;
                 color: #262626;
@@ -127,13 +130,17 @@ function LandingBox({ product }) {
     const [newTags, setNewTags] = useState([]);
     const { title, tags, likes, download, thumbnailPath, writer } = product;
 
-    useMemo(() => {
-        const handleRawTags = (tags) => {
-            const seperateTagsArray = tags.split(",");
-            setNewTags(seperateTagsArray);
-        };
+    const handleRawTags = useCallback((tags) => {
+        const seperateTagsArray = tags.split(",").map((arg) => {
+            return arg.replace(" ", "");
+            //! 공백 제거
+        });
+        setNewTags(seperateTagsArray);
+    }, []);
+
+    useEffect(() => {
         handleRawTags(tags);
-    }, [tags]);
+    }, []);
 
     return (
         <BoxModel
@@ -149,11 +156,14 @@ function LandingBox({ product }) {
             />
             <Contents className={BOX_DEFAULT_STYLE}>
                 <Tags>
-                    {newTags.map((tag, idx) => (
-                        <Tag className={TAG_STYLE} key={idx}>
-                            {tag}
-                        </Tag>
-                    ))}
+                    {newTags.map(
+                        (tag, idx) =>
+                            tag !== "" && (
+                                <Tag className={TAG_STYLE} key={idx}>
+                                    {tag}
+                                </Tag>
+                            )
+                    )}
                 </Tags>
                 <Tags>
                     <Tag isInteraction={true}>

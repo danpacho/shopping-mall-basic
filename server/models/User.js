@@ -33,7 +33,7 @@ const userSchema = mongoose.Schema({
         default: 0,
     },
     //관리자 혹은 유저인지 확인
-    userImagePath: {
+    profilePath: {
         type: String,
         default: "",
     },

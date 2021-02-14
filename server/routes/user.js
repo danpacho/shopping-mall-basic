@@ -4,7 +4,11 @@ const router = express.Router();
 const { User } = require("../models/User");
 //-------------------------------------------------
 const { authUser } = require("../middleware/auth");
-
+const multer = require("multer");
+//-------------------------------------------------
+const UPLOAD_DIR = "uploads/user_profile";
+//-------------------------------------------------
+const FILE_UPLOAD_URL = "/data/profile";
 //!user 등록--------------------------------------------------------------------------------------------------
 
 router.post("/register", (req, res) => {
@@ -89,7 +93,7 @@ router.post("/login", (req, res) => {
 router.get("/auth", authUser, (req, res) => {
     //! authuser 는 콜백을 실행하기전에 시행하는 미들웨어...
     // authUser가 문제없이 통과 -> 인증이 정상적으로 진행됨.
-    const { id, email, name, lastname, role, image } = req.user;
+    const { id, email, name, lastname, role, profilePath } = req.user;
 
     res.status(200).json({
         _id: id,
@@ -100,7 +104,7 @@ router.get("/auth", authUser, (req, res) => {
         name,
         lastname,
         role,
-        image,
+        profilePath,
     });
 });
 
@@ -125,7 +129,7 @@ router.get("/logout", authUser, (req, res) => {
     );
 });
 
-//!user info updata-------------------------------------------------
+//!user info update -------------------------------------------------
 
 router.patch("/update", authUser, (req, res) => {
     const { name, email } = req.body;
@@ -152,5 +156,51 @@ router.patch("/update", authUser, (req, res) => {
         }
     );
 });
+
+//! User profileImg save ----------------------------------------------
+
+const dataStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, `${UPLOAD_DIR}`);
+    },
+    //destination: 파일 저장 위치
+    filename: function (req, file, cb) {
+        cb(null, `${Date.now()}_${file.originalname}`);
+    },
+});
+
+const uploadFile = multer({ storage: dataStorage }).single("file");
+
+router.post(FILE_UPLOAD_URL, (req, res) => {
+    // 가져온 이미지 저장 with multer
+
+    uploadFile(req, res, (err) => {
+        if (err) res.json({ uploadProfileSuccess: false, err });
+
+        const { path, filename } = res.req.file;
+        const { email } = res.req.body;
+
+        User.updateOne(
+            {
+                email,
+            },
+            {
+                $set: {
+                    profilePath: path,
+                },
+            },
+            (err, user) => {
+                if (err) res.status(200).json({ err });
+                return res.json({
+                    uploadProfileSuccess: true,
+                    filePath: path,
+                    fileName: filename,
+                });
+            }
+        );
+    });
+});
+
+//-------------------------------------------------------------------
 
 module.exports = router;

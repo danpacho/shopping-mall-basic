@@ -1,11 +1,19 @@
 import axios from "axios";
-import { AUTH_USER, MODIFYING_USER, REGISTER_USER, TYPE_USER } from "./types";
+import {
+    AUTH_USER,
+    MODIFYING_USER,
+    REGISTER_USER,
+    SEND_USER_NAME,
+    SEND_USER_PROFILE,
+    TYPE_USER,
+} from "./types";
 
 const LOGIN_URL = "/api/users/login";
 const REGISTER_URL = "/api/users/register";
 const LOGOUT_URL = "/api/users/logout";
 const AUTH_URL = "/api/users/auth";
 const MODIFYING_URL = "/api/users/update";
+const SEND_USER_PROFILE_URL = "/api/users/data/profile";
 
 export async function loginUser(dataToSend) {
     const request = await axios.post(LOGIN_URL, dataToSend);
@@ -43,11 +51,20 @@ export async function authUser() {
     };
 }
 
-export async function modifyingUser(dataToSend) {
+export async function sendUserName(dataToSend) {
     const request = await axios.patch(MODIFYING_URL, dataToSend);
 
     return {
-        type: MODIFYING_USER,
+        type: SEND_USER_NAME,
+        payload: request.data,
+    };
+}
+
+export async function sendUserProfile(formData, config) {
+    const request = await axios.post(SEND_USER_PROFILE_URL, formData, config);
+
+    return {
+        type: SEND_USER_PROFILE,
         payload: request.data,
     };
 }
