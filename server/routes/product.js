@@ -89,18 +89,42 @@ router.post("/products", (req, res) => {
         });
 });
 
+//! post specific user products ----------------------------------------------------------
+
+router.post("/products/user", async (req, res) => {
+    try {
+        await Product.find()
+            .where("writer")
+            .equals(req.query.id)
+            .populate("writer")
+            .exec((err, productsInfo) => {
+                if (err)
+                    res.status(400).json({
+                        getSpecificProductsSuccess: false,
+                        err,
+                    });
+                res.status(200).json({
+                    getSpecificProductsSuccess: true,
+                    productsInfo,
+                });
+            });
+    } catch (err) {
+        res.status(400).json({ getSpecificProductsSuccess: false, err });
+    }
+});
+
 //! modify products LIKE -----------------------------------------------------------------
 
 router.patch("/products/like", (req, res) => {
     const { _id, like } = req.body;
 
-    Product.findOneAndUpdate(
+    Product.updateOne(
         {
-            _id: _id,
+            _id,
         },
         {
             $set: {
-                like: like,
+                likes: like,
             },
         },
         {

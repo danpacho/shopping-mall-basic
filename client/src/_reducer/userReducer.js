@@ -1,11 +1,12 @@
 import {
     AUTH_USER,
     LOGOUT_USER,
-    MODIFYING_USER,
     REGISTER_USER,
     TYPE_USER,
     SEND_USER_PROFILE,
     SEND_USER_NAME,
+    GET_USERS_PRODUCT_DATA,
+    GET_SPECIFIC_USERS_PRODUCT_DATA,
 } from "../_action/types";
 
 export default function userReducer(state, action) {
@@ -22,6 +23,10 @@ export default function userReducer(state, action) {
             return { ...state, uploadNameSuccess: action.payload };
         case SEND_USER_PROFILE:
             return { ...state, uploadProfileSuccess: action.payload };
+        case GET_USERS_PRODUCT_DATA:
+            return { ...state, getProductsSuccess: action.payload };
+        case GET_SPECIFIC_USERS_PRODUCT_DATA:
+            return { ...state, getSpecificProductsSuccess: action.payload };
         default:
             return "";
     }

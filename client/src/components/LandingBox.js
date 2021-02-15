@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styled, { css } from "styled-components";
 import { BOX_DEFAULT_STYLE, TAG_STYLE } from "../utils/ClassName";
-import { AddToCart, Heart } from "../assets/iconComponents/index";
+import { AddToCart, Heart, UserDemo } from "../assets/iconComponents/index";
 import background from "../assets/images/BlurMask.png";
+import { Link } from "react-router-dom";
+import ProfileImageContainer from "../utils/ProfileImageContainer";
 
 const BoxModel = styled.div`
     transition: all ease-out 0.5s;
@@ -13,7 +15,7 @@ const BoxModel = styled.div`
     flex-direction: column;
 
     width: 20rem;
-    height: 25rem;
+    height: 26rem;
 
     margin-bottom: 0.5rem;
 
@@ -38,9 +40,18 @@ const Tags = styled.ul`
     flex-direction: row;
     flex-direction: ${(props) => props.isInteraction && "column"};
 
-    width: fit-content;
+    width: 50%;
+
     height: auto;
     margin: 0.5rem;
+
+    ${(props) =>
+        props.isTags &&
+        css`
+            width: fit-content;
+            justify-content: left;
+            margin: 0.25rem;
+        `};
 `;
 
 const Tag = styled.li`
@@ -67,6 +78,7 @@ const Tag = styled.li`
     ${(props) =>
         props.isInteraction &&
         css`
+            transition: all ease-in-out 0.25s;
             border: none;
 
             font-weight: 400;
@@ -78,6 +90,7 @@ const Tag = styled.li`
             &:hover {
                 background: transparent;
                 color: #262626;
+                text-decoration: underline;
             }
         `};
 
@@ -138,6 +151,8 @@ function LandingBox({ product }) {
         setNewTags(seperateTagsArray);
     }, []);
 
+    const handleLikeAction = () => {};
+
     useEffect(() => {
         handleRawTags(tags);
     }, []);
@@ -154,36 +169,65 @@ function LandingBox({ product }) {
                 src={`http://localhost:5000/${thumbnailPath}`}
                 alt="img"
             />
+            <Tags
+                isTags={true}
+                className={"w-full flex items-center content-start"}
+            >
+                {newTags.map(
+                    (tag, idx) =>
+                        tag !== "" && (
+                            <Tag className={TAG_STYLE} key={idx}>
+                                {tag}
+                            </Tag>
+                        )
+                )}
+            </Tags>
             <Contents className={BOX_DEFAULT_STYLE}>
-                <Tags>
-                    {newTags.map(
-                        (tag, idx) =>
-                            tag !== "" && (
-                                <Tag className={TAG_STYLE} key={idx}>
-                                    {tag}
-                                </Tag>
-                            )
-                    )}
-                </Tags>
-                <Tags>
-                    <Tag isInteraction={true}>
-                        <Heart
-                            width={"1.75em"}
-                            height={"1.75em"}
-                            className={"hover:text-red-500"}
-                        />
-                        {likes}
-                    </Tag>
-                    <Tag isInteraction={true}>
-                        <AddToCart
-                            width={"1.75em"}
-                            height={"1.75em"}
-                            className={"hover:text-green-500"}
-                        />
-                        {download}
-                    </Tag>
-                    <Tag isInteraction={true}>by {writer?.name}</Tag>
-                </Tags>
+                <div
+                    className={
+                        "w-full h-12 flex flex-row items-center content-end border-gray-300"
+                    }
+                >
+                    <Tags>
+                        <Tag isInteraction={true} onClick={handleLikeAction}>
+                            <Heart
+                                width={"1.75em"}
+                                height={"1.75em"}
+                                className={"hover:text-red-500"}
+                            />
+                            {likes}
+                        </Tag>
+                        <Tag isInteraction={true}>
+                            <AddToCart
+                                width={"1.75em"}
+                                height={"1.75em"}
+                                className={"hover:text-green-500"}
+                            />
+                            {download}
+                        </Tag>
+                    </Tags>
+                    <Tags>
+                        <Tag isInteraction={true}>
+                            {writer?.name && (
+                                <Link to={`user/${writer?._id}`}>
+                                    by {writer?.name}
+                                </Link>
+                            )}
+                        </Tag>
+                        <Tag isInteraction={true}>
+                            {!writer?.profilePath ? (
+                                <UserDemo width={"1.5rem"} height={"1.5rem"} />
+                            ) : (
+                                <ProfileImageContainer
+                                    alt="profile-img"
+                                    src={`http://localhost:5000/${writer?.profilePath}`}
+                                    isSpecificUser={true}
+                                    isLittleCircle={true}
+                                />
+                            )}
+                        </Tag>
+                    </Tags>
+                </div>
             </Contents>
         </BoxModel>
     );

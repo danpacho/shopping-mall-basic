@@ -32,6 +32,7 @@ import {
     CONFIG_ERR_BTN_STYLE,
     CONFIG_SAFE_BTN_STYLE,
     BOX_DEFAULT_STYLE,
+    CONFIG_BOX_DEFAULT_STYLE,
 } from "../../utils/ClassName";
 //--------------------------------------------------
 import ConfigButton from "../../utils/ConfigButton";
@@ -40,22 +41,10 @@ import useNotificationBar from "../../utils/hooks/useNotificationMessage";
 import useProductsInfo from "../../utils/hooks/useProductsInfo";
 import LandingPage from "../../components/LandingPage";
 import Dropzone from "react-dropzone";
+import UserConfigContainer from "../../utils/UserConfigContainer";
+import ProfileImageContainer from "../../utils/ProfileImageContainer";
+import { List, UserConfigLists } from "../../utils/UserConfigLists";
 //--------------------------------------------------
-
-const UserConfigContainer = styled.div`
-    width: 60%;
-    height: 30%;
-
-    margin: 1rem 0;
-    padding: 1.5rem 0;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-
-    border-width: 0.1rem;
-`;
 
 const ImageContainer = styled.div`
     display: flex;
@@ -74,54 +63,6 @@ const ImageContainer = styled.div`
     }
 
     cursor: pointer;
-`;
-
-const UserConfigLists = styled.ul`
-    width: fit-content;
-    margin-top: 0.5rem;
-    padding: 2.5rem;
-    border-left: 1px solid #a6a6a6;
-`;
-
-const List = styled.li`
-    width: 10rem;
-    transition: all ease-out 0.1s;
-
-    padding-bottom: 0.25rem;
-    cursor: pointer;
-    ${(props) =>
-        props.isTitle &&
-        css`
-            margin-bottom: 0.25rem;
-            font-family: "Do Hyeon";
-
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-        `}
-
-    ${(props) =>
-        props.isConfig &&
-        css`
-            text-decoration: underline;
-
-            &:hover {
-                color: #03a678;
-            }
-        `}
-    display:${(props) => props.toggle && "none"};
-`;
-
-const ProfileImage = styled.img`
-    transition: all ease-out 0.2s;
-
-    width: auto;
-    height: 8.5rem;
-
-    max-width: 8.5rem;
-    max-height: 8.5rem;
-
-    border-width: 0.1rem;
 `;
 
 //--------------------------------------------------
@@ -144,7 +85,7 @@ function AccountPage() {
         (state) => state.userReducer.uploadProfileSuccess?.uploadProfileSuccess
     );
     const uploadNameState = useSelector(
-        (state) => state.userReducer.uploadNameSuccess?.updateSuccess
+        (state) => state.userReducer.uploadNameSuccess?.uploadNameSuccess
     );
     //! 페이지 렌더시 userData에서 name, email을 추출
 
@@ -184,7 +125,7 @@ function AccountPage() {
 
                 if (userInfo.name !== newName.name) {
                     setUserInfo({ ...newName });
-                    dispatchUpdateUserInfo(newName);
+                    dispatchUpdateUserName(newName);
                 }
             }
         }
@@ -201,6 +142,7 @@ function AccountPage() {
         dispatchUserProfile(formData, config);
     };
 
+    //! dispatch 시 같은 reducer에 있어야 기존 payload가 제거되지 않음. -memo
     const dispatchUserProfile = async (formData, config) => {
         try {
             const response = await dispatch(sendUserProfile(formData, config));
@@ -221,10 +163,11 @@ function AccountPage() {
         }
     };
 
-    const dispatchUpdateUserInfo = async (newName) => {
+    const dispatchUpdateUserName = async (newName) => {
         try {
             const response = await dispatch(sendUserName(newName));
-            if (response.payload.updateSuccess) {
+
+            if (response.payload.uploadNameSuccess) {
                 setNameUpdate(true);
                 setTimeout(() => {
                     setNameUpdate(false);
@@ -251,17 +194,12 @@ function AccountPage() {
                 </MainLogo>
             </Header>
 
-            <UserConfigContainer
-                className={`${BOX_DEFAULT_STYLE} shadow-sm rounded-sm`}
-            >
+            <UserConfigContainer className={CONFIG_BOX_DEFAULT_STYLE}>
                 {userData?.profilePath ? (
                     <ImageContainer>
-                        <ProfileImage
-                            alt=""
+                        <ProfileImageContainer
+                            alt="profile-img"
                             src={`http://localhost:5000/${userData?.profilePath}`}
-                            className={
-                                "rounded-full shadow-sm hover:shadow border-gray-300 hover:border-green-500 hover:border-opacity-50 select-none"
-                            }
                         />
                         <Dropzone onDrop={onDropHandler}>
                             {({

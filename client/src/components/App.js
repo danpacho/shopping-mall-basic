@@ -9,11 +9,17 @@ import Login from "../routes/LoginPage";
 import Register from "../routes/RegisterPage";
 import Setting from "../routes/login_user/SettingPage";
 import UploadFile from "../routes/login_user/UploadFilePage";
+import UserPostsPage from "../routes/UserPostsPage";
 
 function App() {
     return (
         <Router>
             <Route exact path="/" component={Auth(Home, true)} />
+            <Route
+                exact
+                path="/user/:id"
+                component={Auth(UserPostsPage, true, true)}
+            />
             <Route exact path="/login" component={Auth(Login, true)} />
             <Route exact path="/register" component={Auth(Register, true)} />
             <Route exact path="/account" component={Auth(Account, false)} />

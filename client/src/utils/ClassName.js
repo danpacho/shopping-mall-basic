@@ -23,3 +23,6 @@ export const CONFIG_ERR_BTN_STYLE =
 
 //! UploadPage
 export const TAG_STYLE = "bg-gray-50 rounded-full shadow hover:shadow-none";
+
+//! Config Default
+export const CONFIG_BOX_DEFAULT_STYLE = `${BOX_DEFAULT_STYLE} shadow-sm rounded-sm`;

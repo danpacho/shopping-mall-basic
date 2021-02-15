@@ -26,4 +26,7 @@ export const SEND_USER_PROFILE = "SEND_USER_PROFILE";
 
 export const GET_USERS_PRODUCT_DATA = "GET_USERS_PRODUCT_DATA";
 
+export const GET_SPECIFIC_USERS_PRODUCT_DATA =
+    "GET_SPECIFIC_USERS_PRODUCT_DATA";
+
 //!-----------------------------------------------------

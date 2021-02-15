@@ -111,12 +111,16 @@ router.get("/auth", authUser, (req, res) => {
 //!user 로그아웃 쿠키 속 토큰을 통해 인증을 진행 => DB user 토큰만 지우면 로그아웃 상태로 복귀.--------------
 
 router.get("/logout", authUser, (req, res) => {
-    User.findOneAndUpdate(
+    const { id } = req.user;
+
+    User.updateOne(
         {
-            _id: req.user._id,
+            _id: id,
         },
         {
-            token: "",
+            $set: {
+                token: "",
+            },
         },
 
         (err, user) => {
@@ -131,7 +135,7 @@ router.get("/logout", authUser, (req, res) => {
 
 //!user info update -------------------------------------------------
 
-router.patch("/update", authUser, (req, res) => {
+router.patch("/update", (req, res) => {
     const { name, email } = req.body;
 
     User.findOneAndUpdate(
@@ -148,10 +152,10 @@ router.patch("/update", authUser, (req, res) => {
         },
 
         (err, user) => {
-            if (err) return res.json({ updateSuccess: false, err });
+            if (err) return res.json({ uploadNameSuccess: false, err });
 
             return res.status(200).send({
-                updateSuccess: true,
+                uploadNameSuccess: true,
             });
         }
     );

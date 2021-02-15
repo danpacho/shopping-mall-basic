@@ -17,12 +17,14 @@ import {
     UserAdd,
     ArrowDown,
     UploadMain,
+    UserDemo,
 } from "../assets/iconComponents";
 //-------------------------------------------------------------
 import LandingPage from "../components/LandingPage";
 //-------------------------------------------------------------
 import useToggleBar from "../utils/hooks/useToggleBar";
 import useProductsInfo from "../utils/hooks/useProductsInfo";
+import ProfileImageContainer from "../utils/ProfileImageContainer";
 //-------------------------------------------------------------
 
 const Button = styled.button`
@@ -140,7 +142,20 @@ function HomePage() {
                                 className={`${PROFILE_STYLE} select-none`}
                                 onClick={() => toggleBar(toggle)}
                             >
-                                {userData?.name}
+                                <p className={"mr-2"}>{userData?.name}</p>
+                                {!userData?.profilePath ? (
+                                    <UserDemo
+                                        width={"1.5rem"}
+                                        height={"1.5rem"}
+                                    />
+                                ) : (
+                                    <ProfileImageContainer
+                                        alt="profile-img"
+                                        src={`http://localhost:5000/${userData?.profilePath}`}
+                                        isSpecificUser={true}
+                                        isLittleCircle={true}
+                                    />
+                                )}
                             </ProfileBtn>
                             <ArrowDown />
                         </div>

@@ -44,6 +44,10 @@ const userSchema = mongoose.Schema({
     tokenExp: {
         type: Number,
     },
+    postsLike: {
+        type: Array,
+        default: [],
+    },
 });
 
 //! 유저 비밀번호 암호화 with bycrypt -> 유저를 DB에 저장하기 전에 암호화 하기.
