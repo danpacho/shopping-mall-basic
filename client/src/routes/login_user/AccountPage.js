@@ -208,6 +208,9 @@ function AccountPage() {
 
             if (response.payload.uploadProfileSuccess) {
                 setProfileUpdate(true);
+                setTimeout(() => {
+                    setProfileUpdate(false);
+                }, 3000);
             } else {
                 setProfileUpdate(false);
                 alert("File upload failed😢");
@@ -223,6 +226,9 @@ function AccountPage() {
             const response = await dispatch(sendUserName(newName));
             if (response.payload.updateSuccess) {
                 setNameUpdate(true);
+                setTimeout(() => {
+                    setNameUpdate(false);
+                }, 3000);
             } else {
                 setNameUpdate(false);
                 alert("Name upldate failed😢");
@@ -235,7 +241,6 @@ function AccountPage() {
 
     useEffect(() => {
         setUserData(userData);
-        setNameUpdate(false);
     }, [setUserData, userData]);
 
     return (
@@ -255,7 +260,7 @@ function AccountPage() {
                             alt=""
                             src={`http://localhost:5000/${userData?.profilePath}`}
                             className={
-                                "rounded-full shadow-sm hover:shadow border-gray-300 hover:border-green-500 select-none"
+                                "rounded-full shadow-sm hover:shadow border-gray-300 hover:border-green-500 hover:border-opacity-50 select-none"
                             }
                         />
                         <Dropzone onDrop={onDropHandler}>
