@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
 const UserConfigContainer = styled.div`
+    transition: all ease-in-out 0.2s;
+
     width: 60%;
     height: 30%;
 
@@ -12,7 +14,13 @@ const UserConfigContainer = styled.div`
     align-items: center;
     justify-content: space-evenly;
 
-    border-width: 0.1rem;
+    border-width: 0.25rem;
+
+    @media only screen and (max-width: 768px) {
+        flex-direction: column;
+
+        height: 50%;
+    }
 `;
 
 export default UserConfigContainer;

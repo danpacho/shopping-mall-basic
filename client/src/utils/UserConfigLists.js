@@ -5,6 +5,16 @@ export const UserConfigLists = styled.ul`
     margin-top: 0.5rem;
     padding: 2.5rem;
     border-left: 1.5px solid #a6a6a6;
+
+    @media only screen and (max-width: 768px) {
+        border-left: 0;
+        border-top: 1px solid #a6a6a6;
+
+        margin-top: 2rem;
+        padding-right: 0;
+        padding-left: 0;
+        padding-bottom: 0.5rem;
+    }
 `;
 
 export const List = styled.li`

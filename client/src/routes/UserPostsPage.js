@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 //-------------------------------------------------------------------------------------------
 import { Link, useParams, withRouter } from "react-router-dom";
 //-------------------------------------------------------------------------------------------
@@ -21,7 +20,7 @@ function UserPostsPage() {
     const { id } = useParams();
     const [products, user] = useSpecificUserProducts(id);
     return (
-        <Container isMainPahe={true}>
+        <Container isMainPage={true}>
             <Header>
                 <MainLogo>
                     <Link to="/">Note Share</Link>
@@ -42,7 +41,7 @@ function UserPostsPage() {
                         <List isTitle={true}>닉네임</List>
                         <List isConfig={true}>{user?.name}</List>
                         <List isTitle={true}>이메일</List>
-                        <List isConfig={true}>{user?.email}</List>{" "}
+                        <List isConfig={true}>{user?.email}</List>
                     </UserConfigLists>
                 )}
             </UserConfigContainer>

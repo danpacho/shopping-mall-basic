@@ -1,13 +1,19 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+//----------------------------------------------------------------------------------
+
 import styled, { css } from "styled-components";
+//----------------------------------------------------------------------------------
+import { Link } from "react-router-dom";
+//----------------------------------------------------------------------------------
 import { BOX_DEFAULT_STYLE, TAG_STYLE } from "../utils/ClassName";
+import ProfileImageContainer from "../utils/ProfileImageContainer";
+//----------------------------------------------------------------------------------
 import { AddToCart, Heart, UserDemo } from "../assets/iconComponents/index";
 import background from "../assets/images/BlurMask.png";
-import { Link } from "react-router-dom";
-import ProfileImageContainer from "../utils/ProfileImageContainer";
+//----------------------------------------------------------------------------------
 
 const BoxModel = styled.div`
-    transition: all ease-out 0.5s;
+    transition: all ease-out 0.2s;
 
     display: flex;
     align-items: center;
@@ -19,8 +25,6 @@ const BoxModel = styled.div`
 
     margin-bottom: 0.5rem;
 
-    border-width: 0.1rem;
-
     background-image: ${(props) => props.background};
     background-repeat: no-repeat;
     background-position: center;
@@ -29,7 +33,7 @@ const BoxModel = styled.div`
     color: #262626;
 
     &:hover {
-        transform: translateY(-0.5rem);
+        transform: translateY(-0.1rem);
     }
 `;
 
@@ -55,7 +59,7 @@ const Tags = styled.ul`
 `;
 
 const Tag = styled.li`
-    transition: all ease-in-out 0.2s;
+    transition: all ease-in 0.15s;
 
     display: flex;
     align-items: center;
@@ -72,8 +76,11 @@ const Tag = styled.li`
     font-weight: 600;
 
     &:hover {
-        background: #262626;
+        background-image: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
+
         color: whitesmoke;
+
+        transform: translateY(-0.15rem) scale(1.05);
     }
     ${(props) =>
         props.isInteraction &&
@@ -91,6 +98,8 @@ const Tag = styled.li`
                 background: transparent;
                 color: #262626;
                 text-decoration: underline;
+
+                transform: none;
             }
         `};
 
@@ -118,12 +127,10 @@ const Title = styled.h1`
 const Contents = styled.div`
     width: 100%;
 
-    border-top: 2px solid white;
+    border-top-width: 0.1rem;
 `;
 
-const BackgroundImg = styled.img`
-    transition: all ease-in-out 0.25s;
-
+const BackgroundImg = styled.div`
     height: 100%;
     max-height: 15rem;
 
@@ -132,11 +139,23 @@ const BackgroundImg = styled.img`
     background: transparent;
 
     user-select: none;
-    &:hover {
-        opacity: 0.9;
-    }
 `;
 
+const BackgroundImgContainer = styled.img`
+    transition: all ease-in-out 0.45s;
+
+    height: inherit;
+    max-height: inherit;
+
+    width: inherit;
+
+    user-select: none;
+
+    &:hover {
+        transform: scale(1.05);
+        opacity: 0.99;
+    }
+`;
 //---------------------------------------------------------------
 
 function LandingBox({ product }) {
@@ -160,15 +179,15 @@ function LandingBox({ product }) {
     return (
         <BoxModel
             background={background}
-            className={
-                "container rounded shadow-sm hover:shadow border-gray-300"
-            }
+            className={"container rounded shadow-sm hover:shadow"}
         >
             <Title className={"bg-gray-50"}>{title}</Title>
-            <BackgroundImg
-                src={`http://localhost:5000/${thumbnailPath}`}
-                alt="img"
-            />
+            <BackgroundImg>
+                <BackgroundImgContainer
+                    src={`http://localhost:5000/${thumbnailPath}`}
+                    alt="thumbnail-img"
+                />
+            </BackgroundImg>
             <Tags
                 isTags={true}
                 className={"w-full flex items-center content-start"}
@@ -185,7 +204,7 @@ function LandingBox({ product }) {
             <Contents className={BOX_DEFAULT_STYLE}>
                 <div
                     className={
-                        "w-full h-12 flex flex-row items-center content-end border-gray-300"
+                        "w-full h-12 flex flex-row items-center content-end"
                     }
                 >
                     <Tags>

@@ -132,10 +132,10 @@ router.patch("/products/like", (req, res) => {
         },
 
         (err, user) => {
-            if (err) return res.json({ update: false, err });
+            if (err) return res.json({ updateLikeSuccess: false, err });
 
             return res.status(200).send({
-                updateSuccess: true,
+                updateLikeSuccess: true,
             });
         }
     );

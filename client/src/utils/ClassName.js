@@ -10,7 +10,7 @@ export const ERR_TEXT_STYLE = "text-opacity-90 text-red-500";
 
 export const CONFIG_SUCCESS_STYLE = "text-opacity-90 text-green-600";
 
-export const BOX_DEFAULT_STYLE = "bg-gray-50 border-gray-300";
+export const BOX_DEFAULT_STYLE = "bg-gray-50 border-green-100";
 
 //! AccountPage
 export const CONFIG_BTN_STYLE = "rounded shadow hover:shadow-lg";
@@ -22,7 +22,7 @@ export const CONFIG_ERR_BTN_STYLE =
     "hover:bg-red-500 focus:ring-2 focus:ring-red-300";
 
 //! UploadPage
-export const TAG_STYLE = "bg-gray-50 rounded-full shadow hover:shadow-none";
+export const TAG_STYLE = "rounded-lg shadow hover:shadow-xl";
 
 //! Config Default
-export const CONFIG_BOX_DEFAULT_STYLE = `${BOX_DEFAULT_STYLE} shadow-sm rounded-sm`;
+export const CONFIG_BOX_DEFAULT_STYLE = `${BOX_DEFAULT_STYLE} shadow-sm rounded-xl hover:shadow-md hover:border-green-400`;
