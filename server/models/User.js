@@ -44,7 +44,7 @@ const userSchema = mongoose.Schema({
     tokenExp: {
         type: Number,
     },
-    postsLike: {
+    postsLikes: {
         type: Array,
         default: [],
     },

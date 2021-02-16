@@ -30,3 +30,8 @@ export const GET_SPECIFIC_USERS_PRODUCT_DATA =
     "GET_SPECIFIC_USERS_PRODUCT_DATA";
 
 //!-----------------------------------------------------
+
+export const UPDATE_USER_POST_UPPER_LIKE = "UPDATE_USER_POST_LIKE";
+export const UPDATE_USER_POST_LOWER_LIKE = "UPDATE_USER_POST_LOWER_LIKE";
+
+//!-----------------------------------------------------

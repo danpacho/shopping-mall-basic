@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-function useToggleBar() {
-    const [toggle, setToggle] = useState(false);
+function useToggleBar(bool = false) {
+    const [toggle, setToggle] = useState(bool);
 
     const toggleBar = (arg) => {
         setToggle(!arg);

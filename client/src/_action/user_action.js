@@ -1,7 +1,6 @@
 import axios from "axios";
 import {
     AUTH_USER,
-    MODIFYING_USER,
     REGISTER_USER,
     SEND_USER_NAME,
     SEND_USER_PROFILE,

@@ -3,6 +3,7 @@ const router = express.Router();
 //-----------------------------------------------------------------
 const multer = require("multer");
 const { Product } = require("../models/Product");
+const { User } = require("../models/User");
 //-----------------------------------------------------------------
 const UPLOAD_DIR = "uploads/user_uploads";
 const UPLOAD_THUMBNAIL_DIR = "uploads/user_uploads_thumbnail";
@@ -113,33 +114,91 @@ router.post("/products/user", async (req, res) => {
     }
 });
 
-//! modify products LIKE -----------------------------------------------------------------
+//! modify products LIKE [ UP / DOWN ] -----------------------------------------------------------------
 
-router.patch("/products/like", (req, res) => {
-    const { _id, like } = req.body;
+router.patch("/products/update/like_up", (req, res) => {
+    const { user_id, product_id } = req.body;
 
+    // 유저 아이디, => likes 배열에 프로덕트 아이디 추가
+
+    // 프로덕트 아이디 => 해당 프로덕트 like를 업데이트
     Product.updateOne(
         {
-            _id,
+            _id: product_id,
         },
         {
-            $set: {
-                likes: like,
+            $inc: {
+                likes: 1,
             },
-        },
-        {
-            new: true,
         },
 
         (err, user) => {
-            if (err) return res.json({ updateLikeSuccess: false, err });
+            if (err) return res.status(400).json({ err });
+
+            return res.status(200);
+        }
+    );
+
+    User.updateOne(
+        {
+            _id: user_id,
+        },
+        {
+            $push: {
+                postsLikes: product_id,
+            },
+        },
+        (err, user) => {
+            if (err) return res.json({ updatePostLikeSuccess: false, err });
 
             return res.status(200).send({
-                updateLikeSuccess: true,
+                updateLikePostSuccess: true,
             });
         }
     );
 });
+
+router.patch("/products/update/like_down", (req, res) => {
+    const { user_id, product_id } = req.body;
+
+    Product.updateOne(
+        {
+            _id: product_id,
+        },
+        {
+            $inc: {
+                likes: -1,
+            },
+        },
+
+        (err, user) => {
+            if (err) return res.status(400).json({ err });
+
+            return res.status(200);
+        }
+    );
+
+    User.updateOne(
+        {
+            _id: user_id,
+        },
+        {
+            $pull: {
+                postsLikes: product_id,
+            },
+            //! pull 메서드는 배열속 데이터 제거
+        },
+        (err, user) => {
+            if (err) return res.json({ updatePostLikeSuccess: false, err });
+
+            return res.status(200).send({
+                updateLikePostSuccess: true,
+            });
+        }
+    );
+});
+
+//----------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------
 

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     authUser,
-    modifyingUser,
     sendUserName,
     sendUserProfile,
 } from "../../_action/user_action";
@@ -13,7 +12,7 @@ import { Link, withRouter } from "react-router-dom";
 //--------------------------------------------------
 import { useForm } from "react-hook-form";
 //--------------------------------------------------
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 //--------------------------------------------------
 import Container from "../../utils/Container";
 import Header from "../../utils/Header";
@@ -31,7 +30,6 @@ import {
     CONFIG_BTN_STYLE,
     CONFIG_ERR_BTN_STYLE,
     CONFIG_SAFE_BTN_STYLE,
-    BOX_DEFAULT_STYLE,
     CONFIG_BOX_DEFAULT_STYLE,
 } from "../../utils/ClassName";
 //--------------------------------------------------

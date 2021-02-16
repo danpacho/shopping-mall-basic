@@ -1,15 +1,26 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 //----------------------------------------------------------------------------------
-
+import { useDispatch, useSelector } from "react-redux";
+//----------------------------------------------------------------------------------
 import styled, { css } from "styled-components";
 //----------------------------------------------------------------------------------
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 //----------------------------------------------------------------------------------
 import { BOX_DEFAULT_STYLE, TAG_STYLE } from "../utils/ClassName";
 import ProfileImageContainer from "../utils/ProfileImageContainer";
 //----------------------------------------------------------------------------------
-import { AddToCart, Heart, UserDemo } from "../assets/iconComponents/index";
+import {
+    AddToCart,
+    FillHeart,
+    Heart,
+    UserDemo,
+} from "../assets/iconComponents/index";
 import background from "../assets/images/BlurMask.png";
+import useToggleBar from "../utils/hooks/useToggleBar";
+import {
+    updateProductLowerLike,
+    updateProductUpperLike,
+} from "../_action/update_user_post_action";
 //----------------------------------------------------------------------------------
 
 const BoxModel = styled.div`
@@ -158,10 +169,40 @@ const BackgroundImgContainer = styled.img`
 `;
 //---------------------------------------------------------------
 
-function LandingBox({ product }) {
-    const [newTags, setNewTags] = useState([]);
-    const { title, tags, likes, download, thumbnailPath, writer } = product;
+function LandingBox({ product, history }) {
+    const dispatch = useDispatch();
 
+    const {
+        _id,
+        title,
+        tags,
+        likes,
+        download,
+        thumbnailPath,
+        writer,
+    } = product;
+
+    const userId = useSelector((state) => state.userReducer?.userData?._id);
+    const userPostsLikes = useSelector(
+        (state) => state.userReducer?.userData?.postsLikes
+    );
+    const [like, setLike] = useState(false);
+    const [dislike, setDisLike] = useState(false);
+
+    const setUserLikeIcon = useCallback(async (userId, postsLikes) => {
+        //! 비로그인 유저는 userData 접근 불가능.
+        if (postsLikes === undefined) {
+            setDisLike(true);
+        } else {
+            const criterion = await postsLikes?.filter(
+                (productUserId) => productUserId === userId
+            );
+            if (criterion.length === 0) setDisLike(true);
+            else setLike(true);
+        }
+    }, []);
+
+    const [newTags, setNewTags] = useState([]);
     const handleRawTags = useCallback((tags) => {
         const seperateTagsArray = tags.split(",").map((arg) => {
             return arg.replace(" ", "");
@@ -170,10 +211,45 @@ function LandingBox({ product }) {
         setNewTags(seperateTagsArray);
     }, []);
 
-    const handleLikeAction = () => {};
+    const [renderLike, setRenderLike] = useState(likes);
+
+    const dispatchUpperLike = async () => {
+        if (userId !== undefined) {
+            const upperLikeData = {
+                product_id: _id,
+                user_id: userId,
+            };
+            const res = await dispatch(updateProductUpperLike(upperLikeData));
+            if (res.payload.updateLikePostSuccess) {
+                setDisLike(false);
+                setLike(true);
+                setRenderLike(renderLike + 1);
+            } else alert("update failed😢.");
+        } else {
+            history.push("/login");
+        }
+    };
+
+    const dispatchLowerLike = async () => {
+        if (userId !== undefined) {
+            const lowerLikeData = {
+                product_id: _id,
+                user_id: userId,
+            };
+            const res = await dispatch(updateProductLowerLike(lowerLikeData));
+            if (res.payload.updateLikePostSuccess) {
+                setDisLike(true);
+                setLike(false);
+                setRenderLike(renderLike - 1);
+            } else alert("update failed😢.");
+        } else {
+            history.push("/login");
+        }
+    };
 
     useEffect(() => {
         handleRawTags(tags);
+        setUserLikeIcon(_id, userPostsLikes);
     }, []);
 
     return (
@@ -208,19 +284,35 @@ function LandingBox({ product }) {
                     }
                 >
                     <Tags>
-                        <Tag isInteraction={true} onClick={handleLikeAction}>
-                            <Heart
-                                width={"1.75em"}
-                                height={"1.75em"}
-                                className={"hover:text-red-500"}
-                            />
-                            {likes}
+                        <Tag isInteraction={true}>
+                            {dislike && (
+                                <Heart
+                                    width={"1.75em"}
+                                    height={"1.75em"}
+                                    className={
+                                        "hover:text-red-500 transition-all ease-in-out duration-200"
+                                    }
+                                    onClick={dispatchUpperLike}
+                                />
+                            )}
+                            {like && (
+                                <FillHeart
+                                    width={"1.75em"}
+                                    height={"1.75em"}
+                                    className={"text-red-400"}
+                                    onClick={dispatchLowerLike}
+                                />
+                            )}
+
+                            {renderLike}
                         </Tag>
                         <Tag isInteraction={true}>
                             <AddToCart
                                 width={"1.75em"}
                                 height={"1.75em"}
-                                className={"hover:text-green-500"}
+                                className={
+                                    "hover:text-green-500 transition-all ease-in-out duration-200"
+                                }
                             />
                             {download}
                         </Tag>
@@ -252,4 +344,4 @@ function LandingBox({ product }) {
     );
 }
 
-export default LandingBox;
+export default withRouter(LandingBox);
