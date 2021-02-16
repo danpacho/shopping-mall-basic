@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../_action/user_action";
 import { useState } from "react";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Err from "../utils/Err";
 //------------------------------------------------------------------
 
@@ -126,6 +126,17 @@ function LoginPage(url) {
                     value="Log In"
                     className={`shadow-md ${BTN_STYLE} hover:bg-gray-800 focus:ring-gray-600`}
                 />
+                <p
+                    className={
+                        "flex flex-col items-center content-center mt-4 text-gray-400"
+                    }
+                >
+                    Don't have a account?
+                    <br />
+                    <Link to="/register" className={"mt-4 hover:underline"}>
+                        click here👋
+                    </Link>
+                </p>
             </Form>
         </Container>
     );
