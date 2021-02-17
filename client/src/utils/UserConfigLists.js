@@ -11,9 +11,7 @@ export const UserConfigLists = styled.ul`
         border-top: 1px solid #a6a6a6;
 
         margin-top: 2rem;
-        padding-right: 0;
-        padding-left: 0;
-        padding-bottom: 0.5rem;
+        padding: 1rem 0;
     }
 `;
 

@@ -11,12 +11,12 @@ import ProfileImageContainer from "../utils/ProfileImageContainer";
 //----------------------------------------------------------------------------------
 import {
     AddToCart,
+    Download,
     FillHeart,
     Heart,
     UserDemo,
 } from "../assets/iconComponents/index";
-import background from "../assets/images/BlurMask.png";
-import useToggleBar from "../utils/hooks/useToggleBar";
+//----------------------------------------------------------------------------------
 import {
     updateProductLowerLike,
     updateProductUpperLike,
@@ -35,11 +35,6 @@ const BoxModel = styled.div`
     height: 26rem;
 
     margin-bottom: 0.5rem;
-
-    background-image: ${(props) => props.background};
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
 
     color: #262626;
 
@@ -186,6 +181,7 @@ function LandingBox({ product, history }) {
     const userPostsLikes = useSelector(
         (state) => state.userReducer?.userData?.postsLikes
     );
+    const [renderLike, setRenderLike] = useState(likes);
     const [like, setLike] = useState(false);
     const [dislike, setDisLike] = useState(false);
 
@@ -211,9 +207,7 @@ function LandingBox({ product, history }) {
         setNewTags(seperateTagsArray);
     }, []);
 
-    const [renderLike, setRenderLike] = useState(likes);
-
-    const dispatchUpperLike = async () => {
+    const dispatchUpperLike = useCallback(async () => {
         if (userId !== undefined) {
             const upperLikeData = {
                 product_id: _id,
@@ -228,9 +222,9 @@ function LandingBox({ product, history }) {
         } else {
             history.push("/login");
         }
-    };
+    }, [_id, dispatch, history, renderLike, userId]);
 
-    const dispatchLowerLike = async () => {
+    const dispatchLowerLike = useCallback(async () => {
         if (userId !== undefined) {
             const lowerLikeData = {
                 product_id: _id,
@@ -245,7 +239,7 @@ function LandingBox({ product, history }) {
         } else {
             history.push("/login");
         }
-    };
+    }, [_id, dispatch, history, renderLike, userId]);
 
     useEffect(() => {
         handleRawTags(tags);
@@ -253,10 +247,7 @@ function LandingBox({ product, history }) {
     }, []);
 
     return (
-        <BoxModel
-            background={background}
-            className={"container rounded shadow-sm hover:shadow"}
-        >
+        <BoxModel className={"container rounded shadow-sm hover:shadow"}>
             <Title className={"bg-gray-50"}>{title}</Title>
             <BackgroundImg>
                 <BackgroundImgContainer
@@ -307,7 +298,7 @@ function LandingBox({ product, history }) {
                             {renderLike}
                         </Tag>
                         <Tag isInteraction={true}>
-                            <AddToCart
+                            <Download
                                 width={"1.75em"}
                                 height={"1.75em"}
                                 className={
@@ -315,6 +306,15 @@ function LandingBox({ product, history }) {
                                 }
                             />
                             {download}
+                        </Tag>
+                        <Tag isInteraction={true}>
+                            <AddToCart
+                                width={"1.75em"}
+                                height={"1.75em"}
+                                className={
+                                    "hover:text-yellow-300 transition-all ease-in-out duration-200"
+                                }
+                            />
                         </Tag>
                     </Tags>
                     <Tags>

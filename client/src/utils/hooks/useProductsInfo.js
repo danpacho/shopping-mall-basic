@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getUserFiles } from "../../_action/get_user_files_action";
 
@@ -8,15 +8,16 @@ function useProductsInfo() {
 
     const [products, setProducts] = useState([]);
 
-    useMemo(() => {
-        const dispatchProducts = async () => {
-            const response = await dispatch(getUserFiles);
-            if (response.payload.getProductsSuccess) {
-                setProducts(response.payload.productInfo);
-            }
-        };
-        dispatchProducts();
+    const dispatchProducts = useCallback(async () => {
+        const response = await dispatch(getUserFiles);
+        if (response.payload.getProductsSuccess) {
+            setProducts(response.payload.productInfo);
+        }
     }, [dispatch]);
+
+    useEffect(() => {
+        dispatchProducts();
+    }, [dispatchProducts]);
 
     return products;
 }

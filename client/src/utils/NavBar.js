@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
-import { Cog, Logout, UserCircle } from "../assets/iconComponents";
+import { Cog, FillHeart, Logout, UserCircle } from "../assets/iconComponents";
 
 const NavContainer = styled.div`
     position: fixed;
@@ -83,6 +83,10 @@ function NavBar({ toggle, handleLogOut }) {
             <NavBtn>
                 <Link to="/account">account</Link>
                 <UserCircle />
+            </NavBtn>
+            <NavBtn>
+                <Link to="/likes">likes</Link>
+                <FillHeart width={"1rem"} hight={"1rem"} />
             </NavBtn>
             <NavBtn>
                 <Link to="/settings">settings</Link>
