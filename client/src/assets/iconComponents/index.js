@@ -21,3 +21,6 @@ export { default as UploadMain } from "./UploadMain";
 export { default as AddToCart } from "./AddToCart";
 export { default as FillHeart } from "./FillHeart";
 export { default as Heart } from "./Heart";
+export { default as Exit } from "./Exit";
+export { default as Views } from "./Views";
+export { default as VideoTime } from "./VideoTime";

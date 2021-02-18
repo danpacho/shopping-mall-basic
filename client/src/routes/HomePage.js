@@ -25,6 +25,7 @@ import LandingPage from "../components/LandingPage";
 import useToggleBar from "../utils/hooks/useToggleBar";
 import useProductsInfo from "../utils/hooks/useProductsInfo";
 import ProfileImageContainer from "../utils/ProfileImageContainer";
+import { useEffect } from "react";
 //-------------------------------------------------------------
 
 const Button = styled.button`
@@ -110,9 +111,10 @@ function HomePage() {
         if (response.payload.logoutSuccess) {
             window.location.reload();
         } else {
-            alert("fail");
+            alert("logout faild");
         }
     };
+
     //-----------------------------------------------------------------------
 
     return (

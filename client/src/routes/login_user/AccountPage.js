@@ -99,9 +99,11 @@ function AccountPage() {
     //! product filter
 
     const filteringProducts = useMemo(() => {
-        return products.filter(
-            (product) => product?.writer?._id === userData?._id
-        );
+        if (products) {
+            return products.filter(
+                (product) => product?.writer?._id === userData?._id
+            );
+        }
     }, [products, userData]);
 
     //! form handle

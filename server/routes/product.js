@@ -114,7 +114,7 @@ router.post("/products/user", async (req, res) => {
     }
 });
 
-//! modify products LIKE [ UP / DOWN ] -----------------------------------------------------------------
+//! modify products LIKE [ UP ] -----------------------------------------------------------------
 
 router.patch("/products/update/like_up", (req, res) => {
     const { user_id, product_id } = req.body;
@@ -157,6 +157,8 @@ router.patch("/products/update/like_up", (req, res) => {
         }
     );
 });
+
+//! modify products LIKE [ DOWN ] -----------------------------------------------------------------
 
 router.patch("/products/update/like_down", (req, res) => {
     const { user_id, product_id } = req.body;

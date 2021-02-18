@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Loader from "../utils/Loader";
 //-------------------------------------------------------------------
 import LandingBox from "./LandingBox";
 //-------------------------------------------------------------------
@@ -13,18 +14,24 @@ const BoxContainer = styled.div`
     grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     grid-gap: 0.5rem;
     justify-items: center;
+    align-items: center;
 `;
 
 //-------------------------------------------------------------------
 
-function LandingPage({ products }) {
+function LandingPage({ products = undefined }) {
     return (
-        <BoxContainer className={"mt-8"}>
-            {products &&
-                products.map((product) => (
-                    <LandingBox product={product} key={product._id} />
-                ))}
-        </BoxContainer>
+        <>
+            {!products && <Loader />}
+            {products && (
+                <BoxContainer className={"mt-8"}>
+                    {products &&
+                        products.map((product) => (
+                            <LandingBox product={product} key={product._id} />
+                        ))}
+                </BoxContainer>
+            )}
+        </>
     );
 }
 

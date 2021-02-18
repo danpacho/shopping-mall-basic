@@ -27,16 +27,17 @@ function PostsLikesPage() {
 
     const filterLikesPosts = useCallback((products, postsLikes, userId) => {
         //! postsLikes && userId 조건을 붙여서 두가지 값이 읽혀지기전에는 실행 불가. [중요]
-
+        //! postsLikes 는 순수 Array가 아니였음 => Object.entries 로 배열 유사 메서드 사용.
         if (postsLikes && userId) {
             let arr = [];
-            postsLikes.forEach((postId) =>
-                products.forEach((product) => {
-                    product._id === postId &&
-                        userId !== product.writer._id &&
-                        arr.push(product);
-                })
-            );
+            for (const [key, postId] of Object.entries(postsLikes)) {
+                products &&
+                    products.forEach((product) => {
+                        product._id === postId &&
+                            userId !== product.writer._id &&
+                            arr.push(product);
+                    });
+            }
             setFilterdProducts(arr);
         }
     }, []);

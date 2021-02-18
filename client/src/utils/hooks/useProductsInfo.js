@@ -9,7 +9,7 @@ function useProductsInfo() {
     const [products, setProducts] = useState([]);
 
     const dispatchProducts = useCallback(async () => {
-        const response = await dispatch(getUserFiles);
+        const response = await dispatch(getUserFiles());
         if (response.payload.getProductsSuccess) {
             setProducts(response.payload.productInfo);
         }
@@ -19,7 +19,9 @@ function useProductsInfo() {
         dispatchProducts();
     }, [dispatchProducts]);
 
-    return products;
+    if (products.length !== 0) {
+        return products;
+    }
 }
 
 export default useProductsInfo;
