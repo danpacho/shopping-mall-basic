@@ -66,14 +66,6 @@ export const Tag = styled.li`
         css`
             margin: 0;
             margin-right: 0.75rem;
-
-            &:hover {
-                background-image: linear-gradient(
-                    to right,
-                    #434343 0%,
-                    black 100%
-                );
-            }
         `}
     ${(props) =>
         props.isInteraction &&

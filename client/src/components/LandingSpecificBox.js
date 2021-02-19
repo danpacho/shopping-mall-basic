@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -17,6 +17,7 @@ import useTagsFilter from "../utils/hooks/useTagsFilter";
 import useToggleBar from "../utils/hooks/useToggleBar";
 import ProfileImageContainer from "../utils/ProfileImageContainer";
 import { Tags, Tag } from "../utils/TagContainer";
+import { updateProductViews } from "../_action/update_user_post_action";
 
 const PictureContainer = styled.div`
     width: 100%;
@@ -114,6 +115,7 @@ function LandingSpecificBox({
     dispatchLowerLike,
     renderLike,
 }) {
+    const dispatch = useDispatch();
     const {
         _id,
         title,
@@ -130,6 +132,22 @@ function LandingSpecificBox({
     const newTags = useTagsFilter(tags);
 
     const userId = useSelector((state) => state.userReducer?.userData?._id);
+
+    const [view, setViews] = useState(views);
+
+    const dispatchProductViews = async (productId) => {
+        const res = await dispatch(updateProductViews(productId));
+        if (res.payload.updateViewsSuccess) setViews(res.payload.views);
+    };
+
+    useEffect(() => {
+        if (_id) {
+            const productId = {
+                product_id: _id,
+            };
+            dispatchProductViews(productId);
+        }
+    }, []);
 
     return (
         <Container toggle={show} className={"rounded-xl shadow-lg"}>
@@ -218,7 +236,7 @@ function LandingSpecificBox({
                             " hover:text-blue-500 transition-all ease-in-out duration-200"
                         }
                     />
-                    {views}
+                    {view}
                 </Tag>
                 <Tag isInteraction={true}>
                     <AddToCart

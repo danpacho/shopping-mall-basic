@@ -25,13 +25,12 @@ import LandingPage from "../components/LandingPage";
 import useToggleBar from "../utils/hooks/useToggleBar";
 import useProductsInfo from "../utils/hooks/useProductsInfo";
 import ProfileImageContainer from "../utils/ProfileImageContainer";
-import { useEffect } from "react";
 //-------------------------------------------------------------
 
 const Button = styled.button`
     transition: all 0.1s ease-in-out;
 
-    width: 105px;
+    width: 110px;
     padding: 0.25rem 1rem;
     margin-right: 0.5rem;
 

@@ -149,7 +149,10 @@ router.patch("/products/update/like_up", (req, res) => {
             },
         },
         (err, user) => {
-            if (err) return res.json({ updatePostLikeSuccess: false, err });
+            if (err)
+                return res
+                    .status(400)
+                    .json({ updatePostLikeSuccess: false, err });
 
             return res.status(200).send({
                 updateLikePostSuccess: true,
@@ -191,10 +194,40 @@ router.patch("/products/update/like_down", (req, res) => {
             //! pull 메서드는 배열속 데이터 제거
         },
         (err, user) => {
-            if (err) return res.json({ updatePostLikeSuccess: false, err });
+            if (err)
+                return res
+                    .status(400)
+                    .json({ updatePostLikeSuccess: false, err });
 
             return res.status(200).send({
                 updateLikePostSuccess: true,
+            });
+        }
+    );
+});
+
+//! UPDATE VIEWS ------------------------------------------------------------------------------------------
+
+router.patch("/products/update/views", (req, res) => {
+    const { product_id } = req.body;
+
+    Product.findOneAndUpdate(
+        {
+            _id: product_id,
+        },
+        {
+            $inc: {
+                views: 1,
+            },
+        },
+        { returnNewDocument: true },
+        (err, product) => {
+            if (err)
+                return res.status(400).json({ updateViewsSuccess: false, err });
+
+            return res.status(200).send({
+                updateViewsSuccess: true,
+                views: product.views,
             });
         }
     );

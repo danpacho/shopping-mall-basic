@@ -9,6 +9,7 @@ import {
     GET_SPECIFIC_USERS_PRODUCT_DATA,
     UPDATE_USER_POST_UPPER_LIKE,
     UPDATE_USER_POST_LOWER_LIKE,
+    UPDATE_USER_VIEWS,
 } from "../_action/types";
 
 export default function userReducer(state, action) {
@@ -45,6 +46,11 @@ export default function userReducer(state, action) {
 
         case UPDATE_USER_POST_LOWER_LIKE:
             return { ...state, updateLikeSuccess: action.payload };
+
+        //!---------------------------------------------------
+
+        case UPDATE_USER_VIEWS:
+            return { ...state, updateViewsSuccess: action.payload };
 
         //!---------------------------------------------------
 
