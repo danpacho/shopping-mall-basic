@@ -25,6 +25,7 @@ import LandingPage from "../components/LandingPage";
 import useToggleBar from "../utils/hooks/useToggleBar";
 import useProductsInfo from "../utils/hooks/useProductsInfo";
 import ProfileImageContainer from "../utils/ProfileImageContainer";
+import { useEffect, useState } from "react";
 //-------------------------------------------------------------
 
 const Button = styled.button`
@@ -56,6 +57,10 @@ const Button = styled.button`
         outline: none;
         /* 클릭시 남는 것들 완전히 제거 */
     }
+
+    @media only screen and (max-width: 468px) {
+        font-size: 1rem;
+    }
 `;
 
 const ProfileBtn = styled.button`
@@ -86,6 +91,14 @@ const ProfileBtn = styled.button`
         outline: none;
         /* 클릭시 남는 것들 완전히 제거 */
     }
+
+    @media only screen and (max-width: 468px) {
+        font-size: 0;
+        padding: 0;
+        padding-right: 0.5rem;
+
+        margin-right: 0.25rem;
+    }
 `;
 
 const PROFILE_STYLE = "rounded-full shadow-sm border hover:shadow-lg";
@@ -94,7 +107,7 @@ const PROFILE_STYLE = "rounded-full shadow-sm border hover:shadow-lg";
 function HomePage() {
     const dispatch = useDispatch();
 
-    const [toggleBar, toggle] = useToggleBar();
+    const [toggleBar, toggle] = useToggleBar(false);
     const products = useProductsInfo();
 
     //! 유저 정보 가져오기 -------------------------------------------------
@@ -113,6 +126,8 @@ function HomePage() {
             alert("logout faild");
         }
     };
+
+    useEffect(() => {});
 
     //-----------------------------------------------------------------------
 
@@ -160,7 +175,7 @@ function HomePage() {
                             </ProfileBtn>
                             <ArrowDown />
                         </div>
-                        <NavBar toggle={toggle} handleLogOut={handleLogOut} />
+                        <NavBar handleLogOut={handleLogOut} toggle={toggle} />
                     </>
                 )}
                 {!userData?.isAuth && (

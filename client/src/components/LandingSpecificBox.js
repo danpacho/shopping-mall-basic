@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+//----------------------------------------------------------------------------------
 import styled from "styled-components";
+//----------------------------------------------------------------------------------
 import {
     AddToCart,
     Download,
@@ -12,19 +11,36 @@ import {
     VideoTime,
     Views,
 } from "../assets/iconComponents";
+//----------------------------------------------------------------------------------
 import { TAG_STYLE } from "../utils/ClassName";
-import useTagsFilter from "../utils/hooks/useTagsFilter";
-import useToggleBar from "../utils/hooks/useToggleBar";
 import ProfileImageContainer from "../utils/ProfileImageContainer";
 import { Tags, Tag } from "../utils/TagContainer";
+//----------------------------------------------------------------------------------
+import useTagsFilter from "../utils/hooks/useTagsFilter";
+import useToggleBar from "../utils/hooks/useToggleBar";
+//----------------------------------------------------------------------------------
+import React, { useEffect, useState } from "react";
+//----------------------------------------------------------------------------------
+import { Link } from "react-router-dom";
+//----------------------------------------------------------------------------------
+import { useDispatch, useSelector } from "react-redux";
+//----------------------------------------------------------------------------------
 import { updateProductViews } from "../_action/update_user_post_action";
+import Input from "../utils/Input";
+//----------------------------------------------------------------------------------
 
 const PictureContainer = styled.div`
     width: 100%;
-    height: 85%;
+    height: 87.5%;
     display: flex;
     align-items: center;
     flex-direction: row;
+
+    @media only screen and (max-width: 768px) {
+        flex-direction: column;
+    }
+    @media only screen and (max-width: 468px) {
+    }
 `;
 
 const ContentContainer = styled.div`
@@ -45,6 +61,14 @@ const ContentContainer = styled.div`
     ::-webkit-scrollbar {
         display: none; /* Chrome, Safari, Opera*/
     }
+
+    @media only screen and (max-width: 768px) {
+        width: 100%;
+        height: 40%;
+
+        border-left-width: 0;
+        border-top-width: 0.1rem;
+    }
 `;
 
 const Background = styled.img`
@@ -58,15 +82,23 @@ const Background = styled.img`
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+
+    @media only screen and (max-width: 768px) {
+        width: 100%;
+        height: 60%;
+
+        object-fit: cover;
+        border-radius: 0.75rem 0.75rem 0 0;
+    }
 `;
 
 const Container = styled.div`
-    transition: all ease-in-out 0.3s;
+    transition: all ease-in-out 0.2s;
 
     width: 85%;
-    height: 80%;
+    height: 85%;
 
-    margin-top: 1rem;
+    margin-top: 1.5rem;
 
     position: fixed;
     top: 50%;
@@ -98,17 +130,43 @@ const ExitBtn = styled.div`
     transition: all ease-in-out 0.2s;
 
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 0;
+    right: 0;
+
+    padding: 1.5rem;
 
     &:hover {
         color: gray;
     }
 `;
 
+const TagContainer = styled.ul`
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+
+    margin-top: 1rem;
+    width: 100%;
+`;
+
+const CommentContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: left;
+
+    height: max-content;
+
+    margin: 1rem;
+`;
+
+//----------------------------------------------------------------------------------
+
 function LandingSpecificBox({
     product,
-    toggle,
+    toggle = false,
+    toggleBar,
     like,
     dislike,
     dispatchUpperLike,
@@ -116,6 +174,7 @@ function LandingSpecificBox({
     renderLike,
 }) {
     const dispatch = useDispatch();
+
     const {
         _id,
         title,
@@ -128,7 +187,6 @@ function LandingSpecificBox({
         writer,
     } = product;
 
-    const [setShow, show] = useToggleBar(toggle);
     const newTags = useTagsFilter(tags);
 
     const userId = useSelector((state) => state.userReducer?.userData?._id);
@@ -150,7 +208,7 @@ function LandingSpecificBox({
     }, []);
 
     return (
-        <Container toggle={show} className={"rounded-xl shadow-lg"}>
+        <Container toggle={toggle} className={"rounded-xl shadow-lg"}>
             <PictureContainer>
                 <Background
                     alt="thumbnail-img"
@@ -158,13 +216,9 @@ function LandingSpecificBox({
                 />
                 <ContentContainer className={"border-gray-300"}>
                     <div className={"m-4 flex flex-col justify-evenly"}>
-                        <p className={"mt-4 text-lg"}>{title}</p>
+                        <p className={"mt-4 text-xl"}>{title}</p>
                         <p className={"mt-4"}>{description}</p>
-                        <ul
-                            className={
-                                "mt-4 w-full-full flex flex-row justify-start items-center"
-                            }
-                        >
+                        <TagContainer>
                             {newTags.map(
                                 (tag, idx) =>
                                     tag !== "" && (
@@ -177,11 +231,14 @@ function LandingSpecificBox({
                                         </Tag>
                                     )
                             )}
-                        </ul>
+                        </TagContainer>
                     </div>
-                    <div className={"m-4 flex flex-col justify-evenly"}>
-                        comments
-                    </div>
+                    <CommentContainer>
+                        <Input
+                            placeholder="comments here..."
+                            isUploadPage={true}
+                        />
+                    </CommentContainer>
                 </ContentContainer>
             </PictureContainer>
 
@@ -257,7 +314,7 @@ function LandingSpecificBox({
                 </Tag>
                 <Tag isInteraction={true}>
                     {!writer?.profilePath ? (
-                        <UserDemo width={"1.5rem"} height={"1.5rem"} />
+                        <UserDemo width={"1.75rem"} height={"1.75rem"} />
                     ) : (
                         <ProfileImageContainer
                             alt="profile-img"
@@ -269,8 +326,8 @@ function LandingSpecificBox({
                 </Tag>
             </Tags>
 
-            <ExitBtn>
-                <Exit onClick={() => setShow(show)} />
+            <ExitBtn onClick={() => toggleBar(toggle)}>
+                <Exit />
             </ExitBtn>
         </Container>
     );

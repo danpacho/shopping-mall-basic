@@ -17,7 +17,7 @@ import {
 } from "../../utils/ClassName";
 //------------------------------------------------
 import { UploadMain } from "../../assets/iconComponents";
-//!------------------------------------------------
+//------------------------------------------------
 import { useEffect, useState } from "react";
 //------------------------------------------------
 import { useDispatch, useSelector } from "react-redux";
@@ -190,6 +190,8 @@ function UploadFilePage(url) {
         }
     };
 
+    //----------------------------------------------------------------
+
     return (
         <Container>
             <Header>
@@ -233,6 +235,7 @@ function UploadFilePage(url) {
                                 type="text"
                                 isUploadPage={true}
                                 placeholder="spreate tags by ,"
+                                maxLength="25"
                                 ref={register({ required: true })}
                             />
                             <Title>Add Play Time - SEC</Title>

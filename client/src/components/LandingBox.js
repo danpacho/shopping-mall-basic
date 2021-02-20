@@ -12,6 +12,7 @@ import { Tag, Tags } from "../utils/TagContainer";
 //----------------------------------------------------------------------------------
 import {
     AddToCart,
+    Delete,
     Download,
     FillHeart,
     Heart,
@@ -92,9 +93,25 @@ const BackgroundImgContainer = styled.img`
         opacity: 0.95;
     }
 `;
+
+const DeleteBtn = styled.div`
+    transition: all ease-in-out 0.2s;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+
+    &:hover {
+        color: tomato;
+    }
+`;
+
 //---------------------------------------------------------------
 
-function LandingBox({ product, history }) {
+function LandingBox({ product, isAccountPage, history }) {
     const dispatch = useDispatch();
     const [toggleBar, toggle] = useToggleBar();
 
@@ -115,22 +132,35 @@ function LandingBox({ product, history }) {
         (state) => state.userReducer?.userData?.postsLikes
     );
 
+    //! 좋아요 갯수 초기 표시
+
     const [renderLike, setRenderLike] = useState(likes);
+
+    //! 좋아요, 싫어요 dispatch
+
     const [like, setLike] = useState(false);
     const [dislike, setDisLike] = useState(false);
 
-    const setUserLikeIcon = useCallback(async (userId, postsLikes) => {
+    //! 처음 렌더시 유저 상태에 따른 좋아요 싫어요 렌더링.
+
+    const setUserLikeIcon = useCallback((userId, postsLikes) => {
         //! 비로그인 유저는 userData 접근 불가능.
-        if (postsLikes === undefined) {
+        if (!userId) {
             setDisLike(true);
         } else {
-            const criterion = await postsLikes?.filter(
-                (productUserId) => productUserId === userId
-            );
-            if (criterion.length === 0) setDisLike(true);
-            else setLike(true);
+            if (!postsLikes) {
+                setDisLike(true);
+            } else {
+                const criterion = postsLikes?.filter(
+                    (productUserId) => productUserId === userId
+                );
+                if (criterion.length === 0) setDisLike(true);
+                else setLike(true);
+            }
         }
     }, []);
+
+    //! 좋아요, 싫어요 dispatch server
 
     const dispatchUpperLike = useCallback(async () => {
         if (userId !== undefined) {
@@ -168,7 +198,11 @@ function LandingBox({ product, history }) {
 
     useEffect(() => {
         setUserLikeIcon(_id, userPostsLikes);
-    }, []);
+    }, [_id, setUserLikeIcon, userPostsLikes]);
+
+    const handleDeleteClick = () => {
+        console.log("click");
+    };
 
     return (
         <>
@@ -177,6 +211,7 @@ function LandingBox({ product, history }) {
                 onClick={() => toggleBar(toggle)}
             >
                 <Title className={"bg-gray-50"}>{title}</Title>
+
                 <BackgroundImg>
                     <BackgroundImgContainer
                         src={`http://localhost:5000/${thumbnailPath}`}
@@ -268,21 +303,32 @@ function LandingBox({ product, history }) {
                                     />
                                 )}
                             </Tag>
+                            {isAccountPage && (
+                                <>
+                                    <DeleteBtn onClick={handleDeleteClick}>
+                                        <Delete
+                                            width={"1.5em"}
+                                            height={"1.5em"}
+                                        />
+                                    </DeleteBtn>
+                                    <div className={""}></div>
+                                </>
+                            )}
                         </Tags>
                     </div>
                 </Contents>
             </BoxModel>
-            {toggle && (
-                <LandingSpecificBox
-                    product={product}
-                    toggle={toggle}
-                    like={like}
-                    dislike={dislike}
-                    dispatchLowerLike={dispatchLowerLike}
-                    dispatchUpperLike={dispatchUpperLike}
-                    renderLike={renderLike}
-                />
-            )}
+
+            <LandingSpecificBox
+                product={product}
+                toggle={toggle}
+                toggleBar={toggleBar}
+                like={like}
+                dislike={dislike}
+                dispatchLowerLike={dispatchLowerLike}
+                dispatchUpperLike={dispatchUpperLike}
+                renderLike={renderLike}
+            />
         </>
     );
 }

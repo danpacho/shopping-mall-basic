@@ -1,6 +1,8 @@
 import styled, { css } from "styled-components";
 
 const MainLogo = styled.h1`
+    transition: all ease-in-out 0.3s;
+
     font-size: 2.5rem;
     font-family: "Abel", sans-serif;
 
@@ -29,10 +31,10 @@ const MainLogo = styled.h1`
         `}
 
     @media only screen and (max-width: 768px) {
-        font-size: 2rem;
+        font-size: 1.5rem;
     }
     @media only screen and (max-width: 468px) {
-        font-size: 1.5rem;
+        font-size: 20px;
     }
 `;
 

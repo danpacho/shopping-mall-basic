@@ -201,7 +201,10 @@ function AccountPage() {
                             alt="profile-img"
                             src={`http://localhost:5000/${userData?.profilePath}`}
                         />
-                        <Dropzone onDrop={onDropHandler}>
+                        <Dropzone
+                            onDrop={onDropHandler}
+                            accept=".jpeg,.png, .svg"
+                        >
                             {({
                                 getRootProps,
                                 getInputProps,
@@ -209,11 +212,7 @@ function AccountPage() {
                                 isDragAccept,
                             }) => (
                                 <div {...getRootProps()}>
-                                    <input
-                                        type="file"
-                                        accept=".jpeg,.png"
-                                        {...getInputProps()}
-                                    />
+                                    <input {...getInputProps()} />
 
                                     {!isDragActive && (
                                         <>
@@ -328,7 +327,7 @@ function AccountPage() {
 
             <MainLogo isAccountPage={true}>Your Attribution</MainLogo>
 
-            <LandingPage products={filteringProducts} />
+            <LandingPage products={filteringProducts} isAccountPage={true} />
         </Container>
     );
 }

@@ -1,34 +1,39 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 
 const Loading = styled.div`
-    .loader,
-    .loader:before,
-    .loader:after {
+    background: #333333;
+    animation: load1 1s infinite ease-in-out;
+    width: 1em;
+    height: 4em;
+    color: #333333;
+    text-indent: -9999em;
+    margin: 88px auto;
+    position: relative;
+    font-size: 11px;
+    transform: translateZ(0);
+    animation-delay: -0.16s;
+
+    margin-top: 10rem;
+
+    :before,
+    :after {
         background: #333333;
         animation: load1 1s infinite ease-in-out;
         width: 1em;
         height: 4em;
     }
-    .loader {
-        color: #333333;
-        text-indent: -9999em;
-        margin: 88px auto;
-        position: relative;
-        font-size: 11px;
-        transform: translateZ(0);
-        animation-delay: -0.16s;
-    }
-    .loader:before,
-    .loader:after {
+
+    :before,
+    :after {
         position: absolute;
         top: 0;
         content: "";
     }
-    .loader:before {
+    :before {
         left: -1.5em;
         animation-delay: -0.32s;
     }
-    .loader:after {
+    :after {
         left: 1.5em;
     }
     @keyframes load1 {
@@ -42,11 +47,11 @@ const Loading = styled.div`
             box-shadow: 0 -2em;
             height: 5em;
         }
-    }
+    } ;
 `;
 
 function Loader() {
-    return <Loading className={"loader h-1/2 w-full"} />;
+    return <Loading />;
 }
 
 export default Loader;

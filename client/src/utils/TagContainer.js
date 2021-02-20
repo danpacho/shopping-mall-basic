@@ -23,7 +23,7 @@ export const Tags = styled.ul`
             font-size: 1.25rem;
 
             width: 100%;
-            height: 15%;
+            height: 12.5%;
 
             margin: 0;
             padding: 1.5rem 0;
@@ -66,6 +66,8 @@ export const Tag = styled.li`
         css`
             margin: 0;
             margin-right: 0.75rem;
+
+            background: white;
         `}
     ${(props) =>
         props.isInteraction &&

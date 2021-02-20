@@ -11,6 +11,9 @@ const ProfileImage = styled.img`
     max-height: 8.5rem;
 
     border-width: 0.1rem;
+
+    object-fit: cover;
+
     ${(props) => props.isSpecificUser && "0.5rem"};
 
     ${(props) =>

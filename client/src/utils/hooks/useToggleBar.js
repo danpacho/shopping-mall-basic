@@ -10,9 +10,6 @@ function useToggleBar(bool = false) {
     return [toggleBar, toggle];
 }
 
-//! use:
-//! get return elem by const [a,b] = useToggleBar();
-//! toggle 엘리먼트에 대해 이벤트={()=>a(b)}
-//! hide 하고자 하는 곳에 스타일 컴포넌트로 속성 b를 전달하여 조건부 렌더링.
+//! use: toggleBar과 toggle을 props로 전달해준다.
 
 export default useToggleBar;

@@ -38,3 +38,7 @@ export const UPDATE_USER_POST_LOWER_LIKE = "UPDATE_USER_POST_LOWER_LIKE";
 //!-----------------------------------------------------
 
 export const UPDATE_USER_VIEWS = "UPDATE_USER_VIEWS";
+
+//!-----------------------------------------------------
+
+export const DELETE_USER_POST = "DELETE_USER_POST";

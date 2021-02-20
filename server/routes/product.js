@@ -233,6 +233,28 @@ router.patch("/products/update/views", (req, res) => {
     );
 });
 
+//! post total products -----------------------------------------------------------------
+
+router.post("/products/delete", (req, res) => {
+    const { product_id } = req.body;
+
+    Product.deleteOne(
+        {
+            _id: product_id,
+        },
+        (err, product) => {
+            if (err)
+                return res
+                    .status(400)
+                    .json({ deleteProductSuccess: false, err });
+
+            return res.status(200).send({
+                deleteProductSuccess: true,
+            });
+        }
+    );
+});
+
 //----------------------------------------------------------------------------------
 
 module.exports = router;

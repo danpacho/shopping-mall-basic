@@ -10,6 +10,7 @@ import {
     UPDATE_USER_POST_UPPER_LIKE,
     UPDATE_USER_POST_LOWER_LIKE,
     UPDATE_USER_VIEWS,
+    DELETE_USER_POST,
 } from "../_action/types";
 
 export default function userReducer(state, action) {
@@ -51,6 +52,11 @@ export default function userReducer(state, action) {
 
         case UPDATE_USER_VIEWS:
             return { ...state, updateViewsSuccess: action.payload };
+
+        //!---------------------------------------------------
+
+        case DELETE_USER_POST:
+            return { ...state, deleteProductSuccess: action.payload };
 
         //!---------------------------------------------------
 

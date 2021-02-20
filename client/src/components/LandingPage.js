@@ -19,7 +19,7 @@ const BoxContainer = styled.div`
 
 //-------------------------------------------------------------------
 
-function LandingPage({ products = undefined }) {
+function LandingPage({ products = undefined, isAccountPage = false }) {
     return (
         <>
             {!products && <Loader />}
@@ -27,7 +27,11 @@ function LandingPage({ products = undefined }) {
                 <BoxContainer className={"mt-8"}>
                     {products &&
                         products.map((product) => (
-                            <LandingBox product={product} key={product._id} />
+                            <LandingBox
+                                product={product}
+                                isAccountPage={isAccountPage}
+                                key={product._id}
+                            />
                         ))}
                 </BoxContainer>
             )}
