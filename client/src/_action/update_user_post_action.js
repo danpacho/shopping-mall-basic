@@ -50,7 +50,13 @@ export async function updateProductViews(dataToSend) {
 //!-----------------------------------------------------------------------------------
 
 export async function deleteProduct(dataToSend) {
-    const request = await axios.patch(DELETE_POST_URL, dataToSend);
+    const request = await axios.delete(DELETE_POST_URL, {
+        data: {
+            dataToSend,
+        },
+    });
+
+    // DELETE 요청에 body내용 포함시키기 : 두 번째 인자에 data: {} atrribute를 넣어주면 된다.
 
     return {
         type: DELETE_USER_POST,

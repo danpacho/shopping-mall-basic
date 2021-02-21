@@ -28,6 +28,7 @@ function PostsLikesPage() {
     const filterLikesPosts = useCallback((products, postsLikes, userId) => {
         //! postsLikes && userId 조건을 붙여서 두가지 값이 읽혀지기전에는 실행 불가. [중요]
         //! postsLikes 는 순수 Array가 아니였음 => Object.entries 로 배열 유사 메서드 사용.
+
         if (postsLikes && userId) {
             let arr = [];
             for (const [key, postId] of Object.entries(postsLikes)) {
@@ -65,6 +66,7 @@ function PostsLikesPage() {
             <MainLogo isAccountPage={true} className={"mt-8"}>
                 Likes
             </MainLogo>
+
             <LandingPage products={filterdProducts} />
         </Container>
     );

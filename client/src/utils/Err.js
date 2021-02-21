@@ -30,6 +30,17 @@ const Err = styled.p`
 
             margin-top: 1rem;
         `}
+    ${(props) =>
+        props.isAccountPage &&
+        css`
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            width: 50%;
+        `}
 `;
 
 export default Err;

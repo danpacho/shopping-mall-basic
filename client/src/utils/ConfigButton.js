@@ -35,6 +35,13 @@ const ConfigButton = styled.button`
 
             font-size: 1.25rem;
         `}
+
+    ${(props) =>
+        props.isAccountPage &&
+        css`
+            font-family: "Do Hyeon";
+            font-size: 1rem;
+        `}
 `;
 
 export default ConfigButton;

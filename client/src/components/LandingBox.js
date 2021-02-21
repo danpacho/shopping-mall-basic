@@ -6,7 +6,12 @@ import styled from "styled-components";
 //----------------------------------------------------------------------------------
 import { Link, withRouter } from "react-router-dom";
 //----------------------------------------------------------------------------------
-import { BOX_DEFAULT_STYLE, TAG_STYLE } from "../utils/ClassName";
+import {
+    BOX_DEFAULT_STYLE,
+    CONFIG_BTN_STYLE,
+    CONFIG_ERR_BTN_STYLE,
+    TAG_STYLE,
+} from "../utils/ClassName";
 import ProfileImageContainer from "../utils/ProfileImageContainer";
 import { Tag, Tags } from "../utils/TagContainer";
 //----------------------------------------------------------------------------------
@@ -20,13 +25,18 @@ import {
 } from "../assets/iconComponents/index";
 //----------------------------------------------------------------------------------
 import {
+    deleteProduct,
     updateProductLowerLike,
     updateProductUpperLike,
+    updateProductViews,
 } from "../_action/update_user_post_action";
 //----------------------------------------------------------------------------------
 import useToggleBar from "../utils/hooks/useToggleBar";
 import LandingSpecificBox from "./LandingSpecificBox";
 import useTagsFilter from "../utils/hooks/useTagsFilter";
+import ConfigButton from "../utils/ConfigButton";
+import Err from "../utils/Err";
+import useNotificationBar from "../utils/hooks/useNotificationMessage";
 //----------------------------------------------------------------------------------
 
 const BoxModel = styled.div`
@@ -104,16 +114,54 @@ const DeleteBtn = styled.div`
     padding: 0.5rem;
     margin-right: 0.5rem;
 
+    color: #000;
+
     &:hover {
         color: tomato;
     }
 `;
 
+const WarningPage = styled.div`
+    z-index: 10;
+
+    transition: all ease-in-out 0.2s;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 50%;
+    height: 70%;
+
+    font-size: 1rem;
+
+    background: white;
+`;
+
+const ModalBackground = styled.div`
+    z-index: 4;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(25px);
+
+    display: ${(props) => (props.warningToggle ? "block" : "none")};
+`;
+
 //---------------------------------------------------------------
 
-function LandingBox({ product, isAccountPage, history }) {
+function LandingBox({ product, history, isAccountPage }) {
     const dispatch = useDispatch();
     const [toggleBar, toggle] = useToggleBar();
+    const [setWarningToggleBar, warningToggle] = useToggleBar();
 
     const {
         _id,
@@ -123,6 +171,7 @@ function LandingBox({ product, isAccountPage, history }) {
         download,
         thumbnailPath,
         writer,
+        views,
     } = product;
 
     const newTags = useTagsFilter(tags);
@@ -146,16 +195,18 @@ function LandingBox({ product, isAccountPage, history }) {
     const setUserLikeIcon = useCallback((userId, postsLikes) => {
         //! 비로그인 유저는 userData 접근 불가능.
         if (!userId) {
+            setLike(false);
             setDisLike(true);
         } else {
             if (!postsLikes) {
+                setLike(false);
                 setDisLike(true);
             } else {
                 const criterion = postsLikes?.filter(
                     (productUserId) => productUserId === userId
                 );
-                if (criterion.length === 0) setDisLike(true);
-                else setLike(true);
+                if (criterion.length === 0) setDisLike(true) && setLike(false);
+                else setLike(true) && setDisLike(false);
             }
         }
     }, []);
@@ -196,23 +247,69 @@ function LandingBox({ product, isAccountPage, history }) {
         }
     }, [_id, dispatch, history, renderLike, userId]);
 
+    //! update views
+
+    const [view, setViews] = useState(views);
+
+    const dispatchProductViews = async (productId) => {
+        const res = await dispatch(updateProductViews(productId));
+        if (res.payload.updateViewsSuccess) setViews(res.payload.views);
+    };
+
+    const updateViews = useCallback(() => {
+        if (_id) {
+            const productId = {
+                product_id: _id,
+            };
+            dispatchProductViews(productId);
+        }
+    }, []);
+
+    const handleBoxOpen = () => {
+        //! 박스를 열때 조회수 업데이트
+        toggleBar(toggle);
+        updateViews();
+    };
+
     useEffect(() => {
         setUserLikeIcon(_id, userPostsLikes);
     }, [_id, setUserLikeIcon, userPostsLikes]);
 
+    //! 게시물 삭제
+
+    const deleteSuccessMessage = useNotificationBar("Delete Success 😎!");
+    const [deleteSuccess, setDeleteSuccess] = useState(false);
+
+    const dispatchDeleteProduct = async (productId) => {
+        const res = await dispatch(deleteProduct(productId));
+        if (res.payload.deleteProductSuccess) {
+            setDeleteSuccess(true);
+            setTimeout(() => {
+                setDeleteSuccess(false);
+                window.location.reload();
+            }, 3000);
+        } else {
+            alert("delete failed😢.");
+        }
+    };
+
     const handleDeleteClick = () => {
-        console.log("click");
+        if (_id) {
+            const productId = {
+                product_id: _id,
+            };
+            dispatchDeleteProduct(productId);
+
+            setWarningToggleBar(warningToggle);
+        }
     };
 
     return (
         <>
-            <BoxModel
-                className={"container rounded shadow-sm hover:shadow"}
-                onClick={() => toggleBar(toggle)}
-            >
+            <BoxModel className={"container rounded shadow-sm hover:shadow"}>
                 <Title className={"bg-gray-50"}>{title}</Title>
 
-                <BackgroundImg>
+                <BackgroundImg onClick={handleBoxOpen}>
                     <BackgroundImgContainer
                         src={`http://localhost:5000/${thumbnailPath}`}
                         alt="thumbnail-img"
@@ -234,7 +331,7 @@ function LandingBox({ product, isAccountPage, history }) {
                 <Contents className={BOX_DEFAULT_STYLE}>
                     <div
                         className={
-                            "w-full h-12 flex flex-row items-center content-end"
+                            "w-full h-12 flex flex-row items-center justify-between"
                         }
                     >
                         <Tags>
@@ -303,21 +400,56 @@ function LandingBox({ product, isAccountPage, history }) {
                                     />
                                 )}
                             </Tag>
-                            {isAccountPage && (
-                                <>
-                                    <DeleteBtn onClick={handleDeleteClick}>
-                                        <Delete
-                                            width={"1.5em"}
-                                            height={"1.5em"}
-                                        />
-                                    </DeleteBtn>
-                                    <div className={""}></div>
-                                </>
-                            )}
                         </Tags>
                     </div>
                 </Contents>
+                {isAccountPage && (
+                    <DeleteBtn
+                        onClick={() => setWarningToggleBar(warningToggle)}
+                    >
+                        <Delete width={"1.5em"} height={"1.5em"} />
+                    </DeleteBtn>
+                )}
             </BoxModel>
+
+            {/*//! 삭제 모달창 */}
+            <ModalBackground
+                warningToggle={warningToggle}
+                onClick={() => setWarningToggleBar(warningToggle)}
+            >
+                <WarningPage
+                    className={
+                        "rounded border-red-500 border-4 border-opacity-40 hover:border-opacity-80"
+                    }
+                >
+                    <div
+                        className={
+                            "w-full h-full flex flex-col items-center justify-center"
+                        }
+                    >
+                        <Err className={"text-red-500 text-opacity-80"}>
+                            {title} 게시물을 <br /> 정말 삭제 하시겠습니까?
+                        </Err>
+                        <ConfigButton
+                            isAccountPage={true}
+                            className={`${CONFIG_BTN_STYLE} ${CONFIG_ERR_BTN_STYLE} mt-4`}
+                            onClick={handleDeleteClick}
+                        >
+                            삭제 😢
+                        </ConfigButton>
+                        <Err
+                            isAccountPage={true}
+                            className={"text-gray-300 text-opacity-80"}
+                        >
+                            삭제된 게시물은 복구가 불가능합니다.
+                            <br />
+                            모든 책임은 사용자에게 있습니다.
+                        </Err>
+                    </div>
+                </WarningPage>
+            </ModalBackground>
+            {deleteSuccess && deleteSuccessMessage}
+            {/*//! 삭제 모달창 */}
 
             <LandingSpecificBox
                 product={product}
@@ -328,6 +460,7 @@ function LandingBox({ product, isAccountPage, history }) {
                 dispatchLowerLike={dispatchLowerLike}
                 dispatchUpperLike={dispatchUpperLike}
                 renderLike={renderLike}
+                view={view}
             />
         </>
     );

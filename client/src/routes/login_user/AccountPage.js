@@ -65,7 +65,7 @@ const ImageContainer = styled.div`
 
 //--------------------------------------------------
 
-function AccountPage() {
+function AccountPage({ isAccount }) {
     const dispatch = useDispatch();
 
     //! HOOKS

@@ -235,9 +235,9 @@ router.patch("/products/update/views", (req, res) => {
 
 //! post total products -----------------------------------------------------------------
 
-router.post("/products/delete", (req, res) => {
-    const { product_id } = req.body;
-
+router.delete("/products/delete", (req, res) => {
+    const { product_id } = req.body.dataToSend;
+    console.log(req.body.dataToSend);
     Product.deleteOne(
         {
             _id: product_id,

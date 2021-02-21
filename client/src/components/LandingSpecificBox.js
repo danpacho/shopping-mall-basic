@@ -17,9 +17,8 @@ import ProfileImageContainer from "../utils/ProfileImageContainer";
 import { Tags, Tag } from "../utils/TagContainer";
 //----------------------------------------------------------------------------------
 import useTagsFilter from "../utils/hooks/useTagsFilter";
-import useToggleBar from "../utils/hooks/useToggleBar";
 //----------------------------------------------------------------------------------
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 //----------------------------------------------------------------------------------
 import { Link } from "react-router-dom";
 //----------------------------------------------------------------------------------
@@ -41,6 +40,40 @@ const PictureContainer = styled.div`
     }
     @media only screen and (max-width: 468px) {
     }
+`;
+
+const Container = styled.div`
+    transition: all ease-in-out 0.2s;
+
+    width: 85%;
+    height: 85%;
+
+    margin-top: 1.5rem;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(25px);
+
+    z-index: 1;
+
+    @keyframes init {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    animation: init 0.5s ease-in-out;
+
+    display: ${(props) => (props.toggle ? "block" : "none")};
 `;
 
 const ContentContainer = styled.div`
@@ -92,54 +125,6 @@ const Background = styled.img`
     }
 `;
 
-const Container = styled.div`
-    transition: all ease-in-out 0.2s;
-
-    width: 85%;
-    height: 85%;
-
-    margin-top: 1.5rem;
-
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    display: flex;
-    flex-direction: column;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(25px);
-
-    z-index: 1;
-
-    @keyframes init {
-        0% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 1;
-        }
-    }
-
-    animation: init 0.5s ease-in-out;
-
-    display: ${(props) => (props.toggle ? "block" : "none")};
-`;
-
-const ExitBtn = styled.div`
-    transition: all ease-in-out 0.2s;
-
-    position: absolute;
-    top: 0;
-    right: 0;
-
-    padding: 1.5rem;
-
-    &:hover {
-        color: gray;
-    }
-`;
-
 const TagContainer = styled.ul`
     display: flex;
     flex-direction: row;
@@ -161,6 +146,20 @@ const CommentContainer = styled.div`
     margin: 1rem;
 `;
 
+const ExitBtn = styled.div`
+    transition: all ease-in-out 0.2s;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    padding: 1.5rem;
+
+    &:hover {
+        color: gray;
+    }
+`;
+
 //----------------------------------------------------------------------------------
 
 function LandingSpecificBox({
@@ -172,15 +171,13 @@ function LandingSpecificBox({
     dispatchUpperLike,
     dispatchLowerLike,
     renderLike,
+    view,
 }) {
-    const dispatch = useDispatch();
-
     const {
         _id,
         title,
         playTime,
         description,
-        views,
         tags,
         download,
         thumbnailPath,
@@ -190,22 +187,6 @@ function LandingSpecificBox({
     const newTags = useTagsFilter(tags);
 
     const userId = useSelector((state) => state.userReducer?.userData?._id);
-
-    const [view, setViews] = useState(views);
-
-    const dispatchProductViews = async (productId) => {
-        const res = await dispatch(updateProductViews(productId));
-        if (res.payload.updateViewsSuccess) setViews(res.payload.views);
-    };
-
-    useEffect(() => {
-        if (_id) {
-            const productId = {
-                product_id: _id,
-            };
-            dispatchProductViews(productId);
-        }
-    }, []);
 
     return (
         <Container toggle={toggle} className={"rounded-xl shadow-lg"}>

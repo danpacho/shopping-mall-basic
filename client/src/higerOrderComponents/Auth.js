@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { authUser } from "../_action/user_action";
 //-------------------------------------------------------
@@ -26,8 +26,9 @@ export default function Auth(
             }
             //! 로그인 상태
             else {
-                if (adminRoute && !payload.isAdmin) url.history.push("/");
+                adminRoute && !payload.isAdmin && url.history.push("/");
                 beforeLogInPage && !alwaysAccessPage && url.history.push("/");
+                //! account Page delete btn동작
             }
         },
         [adminRoute, dispatch, beforeLogInPage, alwaysAccessPage]
