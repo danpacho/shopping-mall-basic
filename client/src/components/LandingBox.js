@@ -380,7 +380,7 @@ function LandingBox({ product, history, isAccountPage }) {
                         <Tags>
                             <Tag isInteraction={true}>
                                 {writer?.name && (
-                                    <Link to={`user/${writer?._id}`}>
+                                    <Link to={`${writer?._id}`}>
                                         by {writer?.name}
                                     </Link>
                                 )}

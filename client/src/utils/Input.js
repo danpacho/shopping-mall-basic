@@ -44,7 +44,7 @@ const Input = styled.input`
             border-bottom: 1.5px solid #03a678;
         `}
 
-        ${(props) =>
+    ${(props) =>
         props.isUploadPage &&
         css`
             width: 80%;
@@ -62,6 +62,17 @@ const Input = styled.input`
             ::placeholder {
                 color: #a6a6a6;
                 font-weight: 300;
+            }
+        `}
+    ${(props) =>
+        props.isSpecificProduct &&
+        css`
+            width: 100%;
+            margin-top: 0.25rem;
+            margin-bottom: 0.25rem;
+            &:active,
+            &:focus {
+                border-color: #4a8c6d;
             }
         `}
 `;

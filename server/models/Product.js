@@ -39,6 +39,10 @@ const productSchema = mongoose.Schema({
         type: Number,
         default: 0,
     },
+    comments: {
+        type: Array,
+        default: [],
+    },
 });
 
 const Product = mongoose.model("Product", productSchema);

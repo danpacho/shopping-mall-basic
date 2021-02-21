@@ -220,7 +220,8 @@ router.patch("/products/update/views", (req, res) => {
                 views: 1,
             },
         },
-        { returnNewDocument: true },
+        { new: true },
+        //! 업데이트 된 값을 돌려줌 => 2번째 인자 product 변수에 담김.
         (err, product) => {
             if (err)
                 return res.status(400).json({ updateViewsSuccess: false, err });
@@ -233,7 +234,40 @@ router.patch("/products/update/views", (req, res) => {
     );
 });
 
-//! post total products -----------------------------------------------------------------
+//! ADD COMMENTS ------------------------------------------------------------------------------------------
+
+router.post("/products/comment/add", (req, res) => {
+    const { product_id, user_id, user_name, user_img, comment } = req.body;
+    Product.findOneAndUpdate(
+        {
+            _id: product_id,
+        },
+        {
+            //! $push Array에 새 값을 추가한다.
+            $push: {
+                //! Array 에 객체를 그냥 넣어주면 됨.
+                comments: {
+                    user_id,
+                    user_name,
+                    user_img,
+                    comment,
+                },
+            },
+        },
+        { new: true },
+        (err, product) => {
+            if (err)
+                return res.status(400).json({ addCommentSuccess: false, err });
+
+            return res.status(200).send({
+                addCommentSuccess: true,
+                comments: product.comments,
+            });
+        }
+    );
+});
+
+//! DELETE PRODUCT -----------------------------------------------------------------
 
 router.delete("/products/delete", (req, res) => {
     const { product_id } = req.body.dataToSend;

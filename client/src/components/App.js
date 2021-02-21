@@ -16,11 +16,7 @@ function App() {
     return (
         <Router>
             <Route exact path="/" component={Auth(Home, true)} />
-            <Route
-                exact
-                path="/user/:id"
-                component={Auth(UserPosts, true, true)}
-            />
+            <Route exact path="/:id" component={Auth(UserPosts, true, true)} />
             <Route exact path="/login" component={Auth(Login, true)} />
             <Route exact path="/register" component={Auth(Register, true)} />
             <Route exact path="/account" component={Auth(Account, false)} />

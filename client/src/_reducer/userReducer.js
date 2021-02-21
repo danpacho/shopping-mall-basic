@@ -11,6 +11,7 @@ import {
     UPDATE_USER_POST_LOWER_LIKE,
     UPDATE_USER_VIEWS,
     DELETE_USER_POST,
+    ADD_PRODUCT_COMMENT,
 } from "../_action/types";
 
 export default function userReducer(state, action) {
@@ -52,6 +53,11 @@ export default function userReducer(state, action) {
 
         case UPDATE_USER_VIEWS:
             return { ...state, updateViewsSuccess: action.payload };
+
+        //!---------------------------------------------------
+
+        case ADD_PRODUCT_COMMENT:
+            return { ...state, addCommentSuccess: action.payload };
 
         //!---------------------------------------------------
 

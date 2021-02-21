@@ -24,8 +24,10 @@ import { Link } from "react-router-dom";
 //----------------------------------------------------------------------------------
 import { useDispatch, useSelector } from "react-redux";
 //----------------------------------------------------------------------------------
-import { updateProductViews } from "../_action/update_user_post_action";
+import { useForm } from "react-hook-form";
 import Input from "../utils/Input";
+import CommentBox from "../components/Comment";
+import { addProductComment } from "../_action/update_user_post_action";
 //----------------------------------------------------------------------------------
 
 const PictureContainer = styled.div`
@@ -58,7 +60,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(25px);
+    backdrop-filter: blur(30px);
 
     z-index: 1;
 
@@ -88,12 +90,6 @@ const ContentContainer = styled.div`
     padding: -1rem;
 
     border-left-width: 0.1rem;
-
-    overflow-y: scroll;
-
-    ::-webkit-scrollbar {
-        display: none; /* Chrome, Safari, Opera*/
-    }
 
     @media only screen and (max-width: 768px) {
         width: 100%;
@@ -135,7 +131,7 @@ const TagContainer = styled.ul`
     width: 100%;
 `;
 
-const CommentContainer = styled.div`
+const CommentContainer = styled.form`
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -157,6 +153,18 @@ const ExitBtn = styled.div`
 
     &:hover {
         color: gray;
+    }
+`;
+
+const CommentScroll = styled.div`
+    max-height: 100%;
+
+    padding-bottom: 0.25rem;
+
+    overflow-y: scroll;
+
+    ::-webkit-scrollbar {
+        display: none;
     }
 `;
 
@@ -182,11 +190,52 @@ function LandingSpecificBox({
         download,
         thumbnailPath,
         writer,
+        //! 댓글 배열을 받는다.
+        comments,
     } = product;
 
     const newTags = useTagsFilter(tags);
 
+    //! user comments
+    const dispatch = useDispatch();
+    const { register, handleSubmit } = useForm();
+
     const userId = useSelector((state) => state.userReducer?.userData?._id);
+    const userName = useSelector((state) => state.userReducer?.userData?.name);
+    const userProfilePath = useSelector(
+        (state) => state.userReducer?.userData?.profilePath
+    );
+
+    const [newComments, setNewComments] = useState();
+
+    const dispatchProductComment = async (commentInfo) => {
+        const res = await dispatch(addProductComment(commentInfo));
+        if (res.payload.addCommentSuccess) {
+            //! 업데이트 된 댓글들을 api로부터 받아와 다시 렌더링.
+            setNewComments(res.payload.comments);
+        }
+    };
+
+    const onSubmit = (input, e) => {
+        e.preventDefault();
+        const { comment } = input;
+        if (userId && userName) {
+            const commentInfo = {
+                product_id: _id,
+                user_id: userId,
+                user_name: userName,
+                user_img: userProfilePath,
+                comment,
+            };
+            dispatchProductComment(commentInfo);
+            e.target.reset(); // 인풋 값 초기화.
+        }
+    };
+
+    useEffect(() => {
+        setNewComments(comments);
+        //! 초기 댓글 설정.
+    }, []);
 
     return (
         <Container toggle={toggle} className={"rounded-xl shadow-lg"}>
@@ -214,10 +263,33 @@ function LandingSpecificBox({
                             )}
                         </TagContainer>
                     </div>
-                    <CommentContainer>
+                    <CommentScroll>
+                        {newComments &&
+                            newComments.map(
+                                (
+                                    { comment, user_id, user_name, user_img },
+                                    idx
+                                ) => (
+                                    <CommentBox
+                                        key={idx}
+                                        comment={comment}
+                                        userId={user_id}
+                                        userName={user_name}
+                                        userImgPath={user_img}
+                                    />
+                                )
+                            )}
+                    </CommentScroll>
+                    <CommentContainer onSubmit={handleSubmit(onSubmit)}>
                         <Input
+                            type="text"
+                            name="comment"
+                            ref={register}
                             placeholder="comments here..."
                             isUploadPage={true}
+                            maxLength="20"
+                            minLength="2"
+                            isSpecificProduct={true}
                         />
                     </CommentContainer>
                 </ContentContainer>

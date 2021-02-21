@@ -41,4 +41,10 @@ export const UPDATE_USER_VIEWS = "UPDATE_USER_VIEWS";
 
 //!-----------------------------------------------------
 
+export const ADD_PRODUCT_COMMENT = "ADD_PRODUCT_COMMENT";
+
+//!-----------------------------------------------------
+
 export const DELETE_USER_POST = "DELETE_USER_POST";
+
+//!-----------------------------------------------------
