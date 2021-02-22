@@ -87,8 +87,6 @@ const ContentContainer = styled.div`
     align-items: left;
     justify-content: space-between;
 
-    padding: -1rem;
-
     border-left-width: 0.1rem;
 
     @media only screen and (max-width: 768px) {
@@ -97,6 +95,8 @@ const ContentContainer = styled.div`
 
         border-left-width: 0;
         border-top-width: 0.1rem;
+
+        flex-direction: row;
     }
 `;
 
@@ -127,8 +127,13 @@ const TagContainer = styled.ul`
     justify-content: start;
     align-items: center;
 
-    margin-top: 1rem;
+    flex-wrap: wrap;
+
+    margin: 0 1rem;
     width: 100%;
+
+    @media only screen and (max-width: 768px) {
+    }
 `;
 
 const CommentContainer = styled.form`
@@ -140,6 +145,7 @@ const CommentContainer = styled.form`
     height: max-content;
 
     margin: 1rem;
+    width: 90%;
 `;
 
 const ExitBtn = styled.div`
@@ -157,7 +163,7 @@ const ExitBtn = styled.div`
 `;
 
 const CommentScroll = styled.div`
-    max-height: 100%;
+    width: 100%;
 
     padding-bottom: 0.25rem;
 
@@ -165,6 +171,40 @@ const CommentScroll = styled.div`
 
     ::-webkit-scrollbar {
         display: none;
+    }
+
+    @media only screen and (max-width: 768px) {
+        margin-top: 1rem;
+    }
+`;
+
+const ContentsInfo = styled.div`
+    /* h-1/4 flex flex-col justify-around */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: left;
+
+    min-height: 30%;
+
+    @media only screen and (max-width: 768px) {
+        min-width: 30%;
+        height: 100%;
+    }
+`;
+const CommentsInfo = styled.div`
+    /* " h-3/4 w-full flex flex-col justify-between" */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    height: 70%;
+
+    @media only screen and (max-width: 768px) {
+        width: 70%;
+        height: 100%;
     }
 `;
 
@@ -245,9 +285,9 @@ function LandingSpecificBox({
                     src={`http://localhost:5000/${thumbnailPath}`}
                 />
                 <ContentContainer className={"border-gray-300"}>
-                    <div className={"m-4 flex flex-col justify-evenly"}>
-                        <p className={"mt-4 text-xl"}>{title}</p>
-                        <p className={"mt-4"}>{description}</p>
+                    <ContentsInfo>
+                        <p className={"mt-2 ml-4 md:mt-12 text-xl"}>{title}</p>
+                        <p className={"m-4"}>{description}</p>
                         <TagContainer>
                             {newTags.map(
                                 (tag, idx) =>
@@ -262,36 +302,43 @@ function LandingSpecificBox({
                                     )
                             )}
                         </TagContainer>
-                    </div>
-                    <CommentScroll>
-                        {newComments &&
-                            newComments.map(
-                                (
-                                    { comment, user_id, user_name, user_img },
-                                    idx
-                                ) => (
-                                    <CommentBox
-                                        key={idx}
-                                        comment={comment}
-                                        userId={user_id}
-                                        userName={user_name}
-                                        userImgPath={user_img}
-                                    />
-                                )
-                            )}
-                    </CommentScroll>
-                    <CommentContainer onSubmit={handleSubmit(onSubmit)}>
-                        <Input
-                            type="text"
-                            name="comment"
-                            ref={register}
-                            placeholder="comments here..."
-                            isUploadPage={true}
-                            maxLength="20"
-                            minLength="2"
-                            isSpecificProduct={true}
-                        />
-                    </CommentContainer>
+                    </ContentsInfo>
+                    <CommentsInfo>
+                        <CommentScroll>
+                            {newComments &&
+                                newComments.map(
+                                    (
+                                        {
+                                            comment,
+                                            user_id,
+                                            user_name,
+                                            user_img,
+                                        },
+                                        idx
+                                    ) => (
+                                        <CommentBox
+                                            key={idx}
+                                            comment={comment}
+                                            userId={user_id}
+                                            userName={user_name}
+                                            userImgPath={user_img}
+                                        />
+                                    )
+                                )}
+                        </CommentScroll>
+                        <CommentContainer onSubmit={handleSubmit(onSubmit)}>
+                            <Input
+                                type="text"
+                                name="comment"
+                                ref={register}
+                                placeholder="comments here..."
+                                isUploadPage={true}
+                                maxLength="20"
+                                minLength="2"
+                                isSpecificProduct={true}
+                            />
+                        </CommentContainer>
+                    </CommentsInfo>
                 </ContentContainer>
             </PictureContainer>
 
@@ -360,9 +407,7 @@ function LandingSpecificBox({
 
                 <Tag isInteraction={true}>
                     {writer?.name && (
-                        <Link to={`user/${writer?._id}`}>
-                            by {writer?.name}
-                        </Link>
+                        <Link to={`user${writer?._id}`}>by {writer?.name}</Link>
                     )}
                 </Tag>
                 <Tag isInteraction={true}>

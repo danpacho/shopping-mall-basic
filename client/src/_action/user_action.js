@@ -43,7 +43,6 @@ export async function logoutUser() {
 
 export async function authUser() {
     const request = await axios.get(AUTH_URL);
-
     return {
         type: AUTH_USER,
         payload: request.data,

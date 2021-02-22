@@ -21,7 +21,7 @@ export default function Auth(
         async (url) => {
             //! 로그아웃 상태
             const { payload } = await dispatch(authUser());
-            if (!payload.isAuth) {
+            if (payload && !payload.isAuth) {
                 !beforeLogInPage && url.history.push("/");
             }
             //! 로그인 상태

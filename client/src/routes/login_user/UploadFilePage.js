@@ -130,18 +130,14 @@ function UploadFilePage(url) {
     }));
 
     //! 유저 id 정하기-------------------------------------------------
-    const { user } = useSelector((state) => ({
-        user: state.userReducer.userData,
-    }));
 
+    const user = useSelector((state) => state.userReducer.userData);
     const [userId, setUserId] = useState("");
 
     useEffect(() => {
-        const setUserIdOnInit = (user) => {
-            const id = user?._id;
-            setUserId(id);
-        };
-        setUserIdOnInit(user);
+        if (user?._id) {
+            setUserId(user?._id);
+        }
     }, []);
 
     //----------------------------------------------------------------

@@ -66,8 +66,15 @@ export const Tag = styled.li`
         css`
             margin: 0;
             margin-right: 0.75rem;
+            margin-bottom: 0.75rem;
 
             background: white;
+
+            @media only screen and (max-width: 768px) {
+                font-size: 0.75rem;
+
+                margin-bottom: 0.5rem;
+            }
         `}
     ${(props) =>
         props.isInteraction &&

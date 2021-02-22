@@ -78,10 +78,12 @@ const Contents = styled.div`
 `;
 
 const BackgroundImg = styled.div`
-    height: 100%;
-    max-height: 15rem;
+    overflow: hidden;
 
-    width: auto;
+    height: 100%;
+    max-height: 16.5rem;
+
+    width: 100%;
 
     background: transparent;
 
@@ -97,10 +99,11 @@ const BackgroundImgContainer = styled.img`
     width: inherit;
 
     user-select: none;
+    object-fit: contain;
 
     &:hover {
-        transform: scale(1.05);
-        opacity: 0.95;
+        transform: scale(1.25);
+        opacity: 0.85;
     }
 `;
 
@@ -380,7 +383,7 @@ function LandingBox({ product, history, isAccountPage }) {
                         <Tags>
                             <Tag isInteraction={true}>
                                 {writer?.name && (
-                                    <Link to={`${writer?._id}`}>
+                                    <Link to={`user${writer?._id}`}>
                                         by {writer?.name}
                                     </Link>
                                 )}

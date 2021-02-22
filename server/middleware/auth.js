@@ -6,8 +6,10 @@ const authUser = (req, res, next) => {
     const token = req.cookies.x_auth;
     //2. jwt토큰 복호화 후 유저 찾기
     User.findByToken(token, (err, user) => {
-        if (err) throw err;
-        if (!user) return res.json({ isAuth: false, error: true, user });
+        if (err) {
+            throw err;
+        }
+        if (!user) return res.json({ isAuth: false, error: true });
 
         //! req 에 token 과 user를 전달.
         req.token = token;

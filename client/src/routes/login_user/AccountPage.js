@@ -65,7 +65,7 @@ const ImageContainer = styled.div`
 
 //--------------------------------------------------
 
-function AccountPage({ isAccount }) {
+function AccountPage() {
     const dispatch = useDispatch();
 
     //! HOOKS
@@ -248,7 +248,9 @@ function AccountPage({ isAccount }) {
 
                                 {!isDragActive && (
                                     <>
-                                        <UserDemo />{" "}
+                                        <UserDemo
+                                            className={"text-green-500"}
+                                        />
                                         <ConfigButton
                                             className={`${CONFIG_BTN_STYLE} ${CONFIG_SAFE_BTN_STYLE}`}
                                             isUpload={true}

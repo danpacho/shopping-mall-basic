@@ -94,7 +94,7 @@ router.get("/auth", authUser, (req, res) => {
     //! authuser 는 콜백을 실행하기전에 시행하는 미들웨어...
     // authUser가 문제없이 통과 -> 인증이 정상적으로 진행됨.
     const {
-        id,
+        _id,
         email,
         name,
         lastname,
@@ -103,8 +103,9 @@ router.get("/auth", authUser, (req, res) => {
         postsLikes,
     } = req.user;
 
+    res.set("Content-Type", "text/json");
     res.status(200).json({
-        _id: id,
+        _id,
         isAdmin: role === 0 ? false : true,
         //! 1이면 관리자.
         isAuth: true,

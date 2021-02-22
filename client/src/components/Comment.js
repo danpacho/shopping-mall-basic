@@ -59,14 +59,14 @@ function CommentBox({ comment, userId, userName, userImgPath }) {
     return (
         <CommentContainer className={"rounded-sm shadow-sm"}>
             {userImgPath === "" ? (
-                <Link to={`${userId}`}>
+                <Link to={`user${userId}`}>
                     <UserContainer>
                         <UserDemo width={"1.75rem"} height={"1.75rem"} />
                         <Tag isInteraction={true}>{userName}</Tag>
                     </UserContainer>
                 </Link>
             ) : (
-                <Link to={`${userId}`}>
+                <Link to={`user${userId}`}>
                     <UserContainer>
                         <ProfileImageContainer
                             alt="profile-img"
