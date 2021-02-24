@@ -67,7 +67,7 @@ const Title = styled.h1`
     width: 100%;
     height: 2.5rem;
 
-    font-family: "Do Hyeon", sans-serif;
+    font-family: ${(props) => !props.isLandingPage && "Do Hyeon, sans-serif"};
     font-size: 1.25rem;
 `;
 
@@ -91,7 +91,7 @@ const BackgroundImg = styled.div`
 `;
 
 const BackgroundImgContainer = styled.img`
-    transition: all ease-in-out 0.45s;
+    transition: all ease-out 0.35s;
 
     height: inherit;
     max-height: inherit;
@@ -309,8 +309,10 @@ function LandingBox({ product, history, isAccountPage }) {
 
     return (
         <>
-            <BoxModel className={"container rounded shadow-sm hover:shadow"}>
-                <Title className={"bg-gray-50"}>{title}</Title>
+            <BoxModel className={"container rounded-sm shadow-sm hover:shadow"}>
+                <Title isLandingPage={true} className={"bg-gray-50"}>
+                    {title}
+                </Title>
 
                 <BackgroundImg onClick={handleBoxOpen}>
                     <BackgroundImgContainer

@@ -3,7 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const customId = "custom-id-yes";
 
-function useNotificationBar(message) {
+function useNotificationBar(message = "") {
     toast.success(`${message}`, {
         position: "bottom-left",
         autoClose: 2500,

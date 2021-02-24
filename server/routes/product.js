@@ -237,7 +237,7 @@ router.patch("/products/update/views", (req, res) => {
 //! ADD COMMENTS ------------------------------------------------------------------------------------------
 
 router.post("/products/comment/add", (req, res) => {
-    const { product_id, user_id, user_name, user_img, comment } = req.body;
+    const { product_id, user_id, comment } = req.body;
     Product.findOneAndUpdate(
         {
             _id: product_id,
@@ -248,23 +248,52 @@ router.post("/products/comment/add", (req, res) => {
                 //! Array 에 객체를 그냥 넣어주면 됨.
                 comments: {
                     user_id,
-                    user_name,
-                    user_img,
                     comment,
                 },
             },
         },
-        { new: true },
         (err, product) => {
-            if (err)
+            if (err) {
+                console.log(err);
                 return res.status(400).json({ addCommentSuccess: false, err });
+            }
 
             return res.status(200).send({
                 addCommentSuccess: true,
-                comments: product.comments,
             });
         }
     );
+});
+
+//! READ COMMENTS -----------------------------------------------------------------
+
+router.post("/products/comment/read", async (req, res) => {
+    const { product_id } = req.body;
+    try {
+        await Product.findOne({
+            _id: product_id,
+        })
+            .select("comments")
+            .populate("comments.user_id", "name profilePath")
+            //! 객체 속에 id 를 populate하는 방법:
+            //! comments.user_id
+            // 두번째 인자:
+            //  필드에서 추출하고자 하는 query를 적어준다.
+            .exec((err, product) => {
+                if (err) {
+                    return res
+                        .status(400)
+                        .json({ readCommentSuccess: false, err });
+                }
+
+                return res.status(200).send({
+                    readCommentSuccess: true,
+                    comments: product.comments,
+                });
+            });
+    } catch (err) {
+        return res.status(400).json({ readCommentSuccess: false, err });
+    }
 });
 
 //! DELETE PRODUCT -----------------------------------------------------------------

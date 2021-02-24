@@ -5,6 +5,7 @@ import {
     UPDATE_USER_VIEWS,
     ADD_PRODUCT_COMMENT,
     DELETE_USER_POST,
+    READ_PRODUCT_COMMENT,
 } from "./types";
 
 //!-----------------------------------------------------------------------------------
@@ -16,6 +17,7 @@ const UPDATE_VIEWS_URL = "/api/product/products/update/views";
 //------------------------------------------------------------------------------------
 
 const ADD_COMMENT_URL = "/api/product/products/comment/add";
+const READ_COMMENT_URL = "/api/product/products/comment/read";
 
 //------------------------------------------------------------------------------------
 
@@ -59,6 +61,15 @@ export async function addProductComment(dataToSend) {
 
     return {
         type: ADD_PRODUCT_COMMENT,
+        payload: request.data,
+    };
+}
+
+export async function readProductComment(dataToSend) {
+    const request = await axios.post(READ_COMMENT_URL, dataToSend);
+
+    return {
+        type: READ_PRODUCT_COMMENT,
         payload: request.data,
     };
 }

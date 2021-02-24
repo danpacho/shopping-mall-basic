@@ -1,6 +1,20 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+//댓글 전용 schema 생성.
+const CommentsSchema = new Schema({
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
+    comment: {
+        type: String,
+        required: true,
+    },
+    comment_date: { type: Date, default: Date.now },
+});
+
 const productSchema = mongoose.Schema({
     writer: {
         type: Schema.Types.ObjectId,
@@ -39,10 +53,8 @@ const productSchema = mongoose.Schema({
         type: Number,
         default: 0,
     },
-    comments: {
-        type: Array,
-        default: [],
-    },
+    comments: [CommentsSchema],
+    //! CommentsSchema 참조.
 });
 
 const Product = mongoose.model("Product", productSchema);

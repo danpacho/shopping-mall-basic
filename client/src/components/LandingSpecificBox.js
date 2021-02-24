@@ -27,7 +27,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import Input from "../utils/Input";
 import CommentBox from "../components/Comment";
-import { addProductComment } from "../_action/update_user_post_action";
+import {
+    addProductComment,
+    readProductComment,
+} from "../_action/update_user_post_action";
+import axios from "axios";
 //----------------------------------------------------------------------------------
 
 const PictureContainer = styled.div`
@@ -47,7 +51,7 @@ const PictureContainer = styled.div`
 const Container = styled.div`
     transition: all ease-in-out 0.2s;
 
-    width: 85%;
+    width: 90%;
     height: 85%;
 
     margin-top: 1.5rem;
@@ -241,10 +245,6 @@ function LandingSpecificBox({
     const { register, handleSubmit } = useForm();
 
     const userId = useSelector((state) => state.userReducer?.userData?._id);
-    const userName = useSelector((state) => state.userReducer?.userData?.name);
-    const userProfilePath = useSelector(
-        (state) => state.userReducer?.userData?.profilePath
-    );
 
     const [newComments, setNewComments] = useState();
 
@@ -252,19 +252,19 @@ function LandingSpecificBox({
         const res = await dispatch(addProductComment(commentInfo));
         if (res.payload.addCommentSuccess) {
             //! 업데이트 된 댓글들을 api로부터 받아와 다시 렌더링.
-            setNewComments(res.payload.comments);
+            dispatchReadProductComment();
         }
     };
 
     const onSubmit = (input, e) => {
         e.preventDefault();
         const { comment } = input;
-        if (userId && userName) {
+        if (userId) {
             const commentInfo = {
                 product_id: _id,
                 user_id: userId,
-                user_name: userName,
-                user_img: userProfilePath,
+                // user_name: userName,
+                // user_img: userProfilePath,
                 comment,
             };
             dispatchProductComment(commentInfo);
@@ -272,13 +272,26 @@ function LandingSpecificBox({
         }
     };
 
+    const dispatchReadProductComment = useCallback(async () => {
+        const res = await dispatch(
+            readProductComment({
+                product_id: _id,
+            })
+        );
+        setNewComments(res?.payload?.comments);
+    }, [_id, dispatch]);
+
     useEffect(() => {
-        setNewComments(comments);
+        if (toggle) dispatchReadProductComment();
         //! 초기 댓글 설정.
-    }, []);
+    }, [toggle]);
+
+    useEffect(() => {
+        console.log(newComments);
+    }, [newComments]);
 
     return (
-        <Container toggle={toggle} className={"rounded-xl shadow-lg"}>
+        <Container toggle={toggle} className={"rounded-lg shadow-md"}>
             <PictureContainer>
                 <Background
                     alt="thumbnail-img"
@@ -310,18 +323,18 @@ function LandingSpecificBox({
                                     (
                                         {
                                             comment,
-                                            user_id,
-                                            user_name,
-                                            user_img,
+                                            comment_date,
+                                            user_id: { name, profilePath, _id },
                                         },
                                         idx
                                     ) => (
                                         <CommentBox
                                             key={idx}
                                             comment={comment}
-                                            userId={user_id}
-                                            userName={user_name}
-                                            userImgPath={user_img}
+                                            comment_date={comment_date}
+                                            userId={_id}
+                                            userName={name}
+                                            userImgPath={profilePath}
                                         />
                                     )
                                 )}

@@ -152,7 +152,8 @@ function AccountPage() {
                 setProfileUpdate(true);
                 setTimeout(() => {
                     setProfileUpdate(false);
-                }, 3000);
+                    window.location.reload();
+                }, 3500);
             } else {
                 setProfileUpdate(false);
                 alert("File upload failed😢");
@@ -171,7 +172,8 @@ function AccountPage() {
                 setNameUpdate(true);
                 setTimeout(() => {
                     setNameUpdate(false);
-                }, 3000);
+                    window.location.reload();
+                }, 3500);
             } else {
                 setNameUpdate(false);
                 alert("Name upldate failed😢");

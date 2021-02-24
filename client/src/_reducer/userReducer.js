@@ -12,6 +12,7 @@ import {
     UPDATE_USER_VIEWS,
     DELETE_USER_POST,
     ADD_PRODUCT_COMMENT,
+    READ_PRODUCT_COMMENT,
 } from "../_action/types";
 
 export default function userReducer(state, action) {
@@ -58,6 +59,8 @@ export default function userReducer(state, action) {
 
         case ADD_PRODUCT_COMMENT:
             return { ...state, addCommentSuccess: action.payload };
+        case READ_PRODUCT_COMMENT:
+            return { ...state, readCommentSuccess: action.payload };
 
         //!---------------------------------------------------
 

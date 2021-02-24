@@ -34,8 +34,8 @@ function PostsLikesPage() {
             for (const [key, postId] of Object.entries(postsLikes)) {
                 products &&
                     products.forEach((product) => {
-                        product._id === postId &&
-                            userId !== product.writer._id &&
+                        product?._id === postId &&
+                            userId !== product.writer?._id &&
                             arr.push(product);
                     });
             }

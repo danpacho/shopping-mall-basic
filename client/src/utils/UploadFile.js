@@ -134,7 +134,7 @@ function UploadFile({ nextStep }) {
     };
 
     return !nextStep ? (
-        <Dropzone onDrop={onDropHandler} accept=".pdf, .svg, .png, .jpg">
+        <Dropzone onDrop={onDropHandler} accept=".pdf, .svg, .png, .jpg, .jpeg">
             {({ getRootProps, getInputProps }) => (
                 <>
                     {!uploadComplete ? (
@@ -168,7 +168,7 @@ function UploadFile({ nextStep }) {
             )}
         </Dropzone>
     ) : (
-        <Dropzone onDrop={onDropHandler}>
+        <Dropzone onDrop={onDropHandler} accept=".svg, .png, .jpg, .jpeg">
             {({ getRootProps, getInputProps }) => (
                 <>
                     {!uploadThumbnailComplete ? (
