@@ -45,17 +45,28 @@ const UserContainer = styled.div`
     margin-left: 0.25rem;
 `;
 
-const CommentText = styled.p`
+const CommentText = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+
+    flex-wrap: wrap;
+
     margin-right: 1rem;
+
+    cursor: text;
 
     font-size: 0.85rem;
 
-    cursor: text;
+    @media only screen and (max-width: 768px) {
+        font-size: 0.75rem;
+    }
 `;
 
 //------------------------------------------------------------------------
 
-function CommentBox({ comment, userId, userName, userImgPath }) {
+function CommentBox({ comment, commentDate, userId, userName, userImgPath }) {
     return (
         <CommentContainer className={"rounded-sm shadow-sm"}>
             {userImgPath === "" ? (
@@ -78,7 +89,12 @@ function CommentBox({ comment, userId, userName, userImgPath }) {
                     </UserContainer>
                 </Link>
             )}
-            <CommentText>{comment}</CommentText>
+            <CommentText>
+                <p className={"flex-wrap"}>{comment}</p>
+                <p className={"text-xs text-gray-300"}>
+                    {commentDate.split("T")[0]}
+                </p>
+            </CommentText>
         </CommentContainer>
     );
 }

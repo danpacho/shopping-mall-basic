@@ -1,5 +1,5 @@
 //--------------------------------------------------
-import { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 //--------------------------------------------------
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -336,4 +336,4 @@ function AccountPage() {
     );
 }
 
-export default withRouter(AccountPage);
+export default withRouter(React.memo(AccountPage));

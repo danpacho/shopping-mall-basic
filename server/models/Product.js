@@ -12,7 +12,7 @@ const CommentsSchema = new Schema({
         type: String,
         required: true,
     },
-    comment_date: { type: Date, default: Date.now },
+    comment_date: { type: Date, default: Date },
 });
 
 const productSchema = mongoose.Schema({

@@ -72,4 +72,4 @@ function PostsLikesPage() {
     );
 }
 
-export default PostsLikesPage;
+export default React.memo(PostsLikesPage);

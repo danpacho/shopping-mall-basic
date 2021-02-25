@@ -26,6 +26,7 @@ import useToggleBar from "../utils/hooks/useToggleBar";
 import useProductsInfo from "../utils/hooks/useProductsInfo";
 import ProfileImageContainer from "../utils/ProfileImageContainer";
 import { useEffect, useState } from "react";
+import Cart from "../components/Cart";
 //-------------------------------------------------------------
 
 const Button = styled.button`
@@ -201,6 +202,8 @@ function HomePage() {
                 )}
             </Header>
             <LandingPage products={products} />
+            {/* //! 카트 모달 창 */}
+            <Cart />
         </Container>
     );
 }

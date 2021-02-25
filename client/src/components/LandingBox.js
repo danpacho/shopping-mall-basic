@@ -37,6 +37,7 @@ import useTagsFilter from "../utils/hooks/useTagsFilter";
 import ConfigButton from "../utils/ConfigButton";
 import Err from "../utils/Err";
 import useNotificationBar from "../utils/hooks/useNotificationMessage";
+import { addCartItem } from "../_action/add_to_cart_action";
 //----------------------------------------------------------------------------------
 
 const BoxModel = styled.div`
@@ -91,7 +92,7 @@ const BackgroundImg = styled.div`
 `;
 
 const BackgroundImgContainer = styled.img`
-    transition: all ease-out 0.35s;
+    transition: all 0.4s cubic-bezier(0.39, 0.575, 0.565, 1);
 
     height: inherit;
     max-height: inherit;
@@ -175,6 +176,7 @@ function LandingBox({ product, history, isAccountPage }) {
         thumbnailPath,
         writer,
         views,
+        playTime,
     } = product;
 
     const newTags = useTagsFilter(tags);
@@ -307,6 +309,22 @@ function LandingBox({ product, history, isAccountPage }) {
         }
     };
 
+    //!카트에 아이템 담기
+    const handleAddCartItem = () => {
+        const cartItem = [
+            {
+                product_id: _id,
+                title,
+                playTime,
+            },
+        ];
+        addCartItem(cartItem);
+    };
+
+    // const dispatchAddCartItem = (cartItem) => {
+
+    // };
+
     return (
         <>
             <BoxModel className={"container rounded-sm shadow-sm hover:shadow"}>
@@ -372,7 +390,10 @@ function LandingBox({ product, history, isAccountPage }) {
                                 />
                                 {download}
                             </Tag>
-                            <Tag isInteraction={true}>
+                            <Tag
+                                isInteraction={true}
+                                onClick={handleAddCartItem}
+                            >
                                 <AddToCart
                                     width={"1.75em"}
                                     height={"1.75em"}

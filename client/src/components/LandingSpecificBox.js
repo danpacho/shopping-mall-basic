@@ -20,7 +20,7 @@ import useTagsFilter from "../utils/hooks/useTagsFilter";
 //----------------------------------------------------------------------------------
 import React, { useCallback, useEffect, useState } from "react";
 //----------------------------------------------------------------------------------
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 //----------------------------------------------------------------------------------
 import { useDispatch, useSelector } from "react-redux";
 //----------------------------------------------------------------------------------
@@ -32,6 +32,7 @@ import {
     readProductComment,
 } from "../_action/update_user_post_action";
 import axios from "axios";
+import ExitBtn from "../utils/ExitBtn";
 //----------------------------------------------------------------------------------
 
 const PictureContainer = styled.div`
@@ -152,20 +153,6 @@ const CommentContainer = styled.form`
     width: 90%;
 `;
 
-const ExitBtn = styled.div`
-    transition: all ease-in-out 0.2s;
-
-    position: absolute;
-    top: 0;
-    right: 0;
-
-    padding: 1.5rem;
-
-    &:hover {
-        color: gray;
-    }
-`;
-
 const CommentScroll = styled.div`
     width: 100%;
 
@@ -224,6 +211,7 @@ function LandingSpecificBox({
     dispatchLowerLike,
     renderLike,
     view,
+    history,
 }) {
     const {
         _id,
@@ -234,8 +222,6 @@ function LandingSpecificBox({
         download,
         thumbnailPath,
         writer,
-        //! 댓글 배열을 받는다.
-        comments,
     } = product;
 
     const newTags = useTagsFilter(tags);
@@ -256,19 +242,21 @@ function LandingSpecificBox({
         }
     };
 
-    const onSubmit = (input, e) => {
-        e.preventDefault();
+    const handleCommentSubmit = (input, e) => {
+        e.preventDefault(); // Submit 의 리로딩 작업을 막음.
         const { comment } = input;
         if (userId) {
+            //! 유저 아이디 조회 가능 = 로그인 상태.
             const commentInfo = {
                 product_id: _id,
                 user_id: userId,
-                // user_name: userName,
-                // user_img: userProfilePath,
                 comment,
             };
             dispatchProductComment(commentInfo);
             e.target.reset(); // 인풋 값 초기화.
+        } else {
+            alert("Login Please👋!");
+            history.push("/login"); //login 창으로 이동.
         }
     };
 
@@ -285,10 +273,6 @@ function LandingSpecificBox({
         if (toggle) dispatchReadProductComment();
         //! 초기 댓글 설정.
     }, [toggle]);
-
-    useEffect(() => {
-        console.log(newComments);
-    }, [newComments]);
 
     return (
         <Container toggle={toggle} className={"rounded-lg shadow-md"}>
@@ -331,7 +315,7 @@ function LandingSpecificBox({
                                         <CommentBox
                                             key={idx}
                                             comment={comment}
-                                            comment_date={comment_date}
+                                            commentDate={comment_date}
                                             userId={_id}
                                             userName={name}
                                             userImgPath={profilePath}
@@ -339,7 +323,9 @@ function LandingSpecificBox({
                                     )
                                 )}
                         </CommentScroll>
-                        <CommentContainer onSubmit={handleSubmit(onSubmit)}>
+                        <CommentContainer
+                            onSubmit={handleSubmit(handleCommentSubmit)}
+                        >
                             <Input
                                 type="text"
                                 name="comment"
@@ -437,11 +423,9 @@ function LandingSpecificBox({
                 </Tag>
             </Tags>
 
-            <ExitBtn onClick={() => toggleBar(toggle)}>
-                <Exit />
-            </ExitBtn>
+            <ExitBtn onClick={() => toggleBar(toggle)} />
         </Container>
     );
 }
 
-export default LandingSpecificBox;
+export default withRouter(LandingSpecificBox);

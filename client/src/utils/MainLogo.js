@@ -30,11 +30,18 @@ const MainLogo = styled.h1`
             font-size: 1.5rem;
         `}
 
+    ${(props) =>
+        props.isCart &&
+        css`
+            margin: 0;
+            margin-top: 0.75rem;
+            font-size: 1.5rem;
+        `}
     @media only screen and (max-width: 768px) {
         font-size: 1.5rem;
     }
     @media only screen and (max-width: 468px) {
-        font-size: 20px;
+        font-size: 25px;
     }
 `;
 

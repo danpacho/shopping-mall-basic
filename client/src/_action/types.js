@@ -50,3 +50,13 @@ export const READ_PRODUCT_COMMENT = "READ_PRODUCT_COMMENT";
 export const DELETE_USER_POST = "DELETE_USER_POST";
 
 //!-----------------------------------------------------
+
+// export const READ_CART_ITEM = "READ_CART_ITEM";
+
+// export const ADD_CART_ITEM = "ADD_CART_ITEM";
+
+// export const DELETE_CART_ITEM = "DELETE_CART_ITEM";
+
+// export const RESET_CART_ITEM = "RESET_CART_ITEM";
+
+//!-----------------------------------------------------

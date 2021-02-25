@@ -13,6 +13,9 @@ import {
     DELETE_USER_POST,
     ADD_PRODUCT_COMMENT,
     READ_PRODUCT_COMMENT,
+    ADD_CART_ITEM,
+    DELETE_CART_ITEM,
+    READ_CART_ITEM,
 } from "../_action/types";
 
 export default function userReducer(state, action) {
@@ -68,6 +71,13 @@ export default function userReducer(state, action) {
             return { ...state, deleteProductSuccess: action.payload };
 
         //!---------------------------------------------------
+
+        // case READ_CART_ITEM:
+        //     return { ...state, readCartItem: action.payload };
+        // case ADD_CART_ITEM:
+        //     return { ...state, addCartItem: action.payload };
+        // case DELETE_CART_ITEM:
+        //     return { ...state, deleteCartItem: action.payload };
 
         default:
             return "";
