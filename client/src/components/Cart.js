@@ -1,19 +1,32 @@
-import { set } from "mongoose";
-import { useEffect, useMemo, useState } from "react";
+//----------------------------------------------------------------------
 import styled from "styled-components";
+//----------------------------------------------------------------------
 import { AddToCart, Delete, VideoTime } from "../assets/iconComponents";
+//----------------------------------------------------------------------
 import ExitBtn from "../utils/ExitBtn";
 import useToggleBar from "../utils/hooks/useToggleBar";
 import MainLogo from "../utils/MainLogo";
+//----------------------------------------------------------------------
 import {
     deleteCartItem,
     readCartItem,
     resetCartItem,
-} from "../_action/add_to_cart_action";
+} from "../context/add_to_cart_action";
+//----------------------------------------------------------------------
+import { useCallback, useEffect, useState } from "react";
+import useCartDispatch from "../context/useCartDispatch";
+import useCartState from "../context/useCartState";
+import {
+    ADD_CART_ITEM,
+    DELETE_CART_ITEM,
+    GET_CART_ITEM,
+    RESET_CART_ITEM,
+} from "../context/cart_types";
+//----------------------------------------------------------------------
 
 const CartBtn = styled.button`
     z-index: 0;
-    transition: all ease-out 0.2s;
+    transition: all ease-out 0.1s;
 
     position: fixed;
     bottom: 3.5rem;
@@ -133,14 +146,10 @@ const DeleteBtn = styled.button`
 `;
 
 const ResetBtn = styled.button`
-    transition: all ease-in 0.2s;
+    transition: all ease-out 0.1s;
 
-    position: relative;
-    right: 0;
-    bottom: 0;
-
-    width: 3rem;
-    height: 1.5rem;
+    width: 2.5rem;
+    height: 1.25rem;
 
     margin: 0.25rem;
 
@@ -153,51 +162,82 @@ const ResetBtn = styled.button`
         outline: none;
     }
     &:hover {
-        transform: scale(1.1);
+        transform: scale(1.05);
     }
 `;
 
-function Cart() {
+//----------------------------------------------------------------------
+
+function Cart({ userLoginState }) {
     const [toggleBar, toggle] = useToggleBar(false);
     const [cartItems, setCartItems] = useState([]);
     const [totalTime, setTotalTime] = useState(0);
 
-    const handleDelete = (product_id) => {
-        const deletedItem = deleteCartItem(product_id);
-        setCartItems(deletedItem);
-        const timeSum = deletedItem.reduce((prev, next) => {
+    //for dispatch context api
+    const dispatch = useCartDispatch();
+
+    const getTimeSum = (item) =>
+        item.reduce((prev, next) => {
             return prev + next.playTime;
         }, 0);
 
-        setTotalTime(timeSum);
+    const dispatchDelete = async (product_id) => {
+        const deletedItem = await deleteCartItem(product_id);
+        dispatch(deletedItem);
     };
 
-    const handleReset = () => {
-        resetCartItem();
-        setCartItems([]);
-        setTotalTime(0);
-    };
+    const dispatchReset = async () => dispatch(await resetCartItem());
 
     useEffect(() => {
-        if (toggle) {
-            const items = readCartItem();
-            setCartItems(items);
-            if (items) {
-                const timeSum = items.reduce((prev, next) => {
-                    return prev + next.playTime;
-                }, 0);
+        //처음에 카트 아이템을 불러온다.
+        dispatch(readCartItem());
+    }, []);
 
-                setTotalTime(timeSum);
-            }
+    const cartItem = useCartState();
+
+    const setItemsByActionType = useCallback((items) => {
+        // 아이템 동작 type에 따라서 item을 다시 set한다.
+        switch (items.type) {
+            case GET_CART_ITEM:
+                setCartItems(items?.getItems);
+                setTotalTime(getTimeSum(items?.getItems));
+                return "";
+
+            case ADD_CART_ITEM:
+                setCartItems(items?.addItems);
+                setTotalTime(getTimeSum(items?.addItems));
+                return "";
+
+            case DELETE_CART_ITEM:
+                setCartItems(items?.deleteItems);
+                setTotalTime(getTimeSum(items?.deleteItems));
+                return "";
+
+            case RESET_CART_ITEM:
+                setCartItems([]);
+                setTotalTime(0);
+                return "";
+
+            default:
+                return "";
         }
-    }, [toggle]);
+    }, []);
+
+    useEffect(() => {
+        setItemsByActionType(cartItem);
+    }, [cartItem, setItemsByActionType]);
+
+    const handleOpen = async () => {
+        if (await userLoginState) toggleBar(toggle);
+        else alert("logIn please!");
+    };
 
     return (
         <>
             {!toggle ? (
                 <CartBtn
-                    onClick={() => toggleBar(toggle)}
                     className={"rounded-full border-green-200"}
+                    onClick={handleOpen}
                 >
                     <AddToCart />
                 </CartBtn>
@@ -212,8 +252,8 @@ function Cart() {
                     >
                         <MainLogo isCart={true}>Your Cart</MainLogo>
                         <ExitBtn onClick={() => toggleBar(toggle)} />
-                        <p className={"text-sm text-gray-400 font-extralight"}>
-                            Total Add Time {totalTime}
+                        <p className={"text-sm text-gray-500 font-extralight"}>
+                            Total Add Time {totalTime}s 😎
                         </p>
                     </div>
 
@@ -231,7 +271,9 @@ function Cart() {
                                     }
                                 >
                                     <DeleteBtn
-                                        onClick={() => handleDelete(product_id)}
+                                        onClick={() =>
+                                            dispatchDelete(product_id)
+                                        }
                                     >
                                         <Delete />
                                     </DeleteBtn>
@@ -250,7 +292,7 @@ function Cart() {
                     {cartItems && cartItems.length !== 0 && (
                         <ResetBtn
                             className={"rounded shadow-sm bg-red-400 "}
-                            onClick={handleReset}
+                            onClick={dispatchReset}
                         >
                             Reset
                         </ResetBtn>

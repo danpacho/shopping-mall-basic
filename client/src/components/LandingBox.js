@@ -12,8 +12,11 @@ import {
     CONFIG_ERR_BTN_STYLE,
     TAG_STYLE,
 } from "../utils/ClassName";
+//----------------------------------------------------------------------------------
 import ProfileImageContainer from "../utils/ProfileImageContainer";
 import { Tag, Tags } from "../utils/TagContainer";
+import ConfigButton from "../utils/ConfigButton";
+import Err from "../utils/Err";
 //----------------------------------------------------------------------------------
 import {
     AddToCart,
@@ -31,13 +34,15 @@ import {
     updateProductViews,
 } from "../_action/update_user_post_action";
 //----------------------------------------------------------------------------------
-import useToggleBar from "../utils/hooks/useToggleBar";
 import LandingSpecificBox from "./LandingSpecificBox";
+//----------------------------------------------------------------------------------
+import useToggleBar from "../utils/hooks/useToggleBar";
 import useTagsFilter from "../utils/hooks/useTagsFilter";
-import ConfigButton from "../utils/ConfigButton";
-import Err from "../utils/Err";
 import useNotificationBar from "../utils/hooks/useNotificationMessage";
-import { addCartItem } from "../_action/add_to_cart_action";
+//----------------------------------------------------------------------------------
+import { addCartItem } from "../context/add_to_cart_action";
+import useCartDispatch from "../context/useCartDispatch";
+import useCartState from "../context/useCartState";
 //----------------------------------------------------------------------------------
 
 const BoxModel = styled.div`
@@ -310,7 +315,10 @@ function LandingBox({ product, history, isAccountPage }) {
     };
 
     //!카트에 아이템 담기
-    const handleAddCartItem = () => {
+
+    const dispatchCart = useCartDispatch();
+
+    const handleAddCartItem = async () => {
         const cartItem = [
             {
                 product_id: _id,
@@ -318,12 +326,8 @@ function LandingBox({ product, history, isAccountPage }) {
                 playTime,
             },
         ];
-        addCartItem(cartItem);
+        dispatchCart(await addCartItem(cartItem));
     };
-
-    // const dispatchAddCartItem = (cartItem) => {
-
-    // };
 
     return (
         <>
@@ -390,18 +394,21 @@ function LandingBox({ product, history, isAccountPage }) {
                                 />
                                 {download}
                             </Tag>
-                            <Tag
-                                isInteraction={true}
-                                onClick={handleAddCartItem}
-                            >
-                                <AddToCart
-                                    width={"1.75em"}
-                                    height={"1.75em"}
-                                    className={
-                                        "hover:text-yellow-300 transition-all ease-in-out duration-200"
-                                    }
-                                />
-                            </Tag>
+
+                            {!isAccountPage && (
+                                <Tag
+                                    isInteraction={true}
+                                    onClick={handleAddCartItem}
+                                >
+                                    <AddToCart
+                                        width={"1.75em"}
+                                        height={"1.75em"}
+                                        className={
+                                            "hover:text-yellow-300 transition-all ease-in-out duration-200"
+                                        }
+                                    />
+                                </Tag>
+                            )}
                         </Tags>
                         <Tags>
                             <Tag isInteraction={true}>
@@ -488,6 +495,7 @@ function LandingBox({ product, history, isAccountPage }) {
                 renderLike={renderLike}
                 view={view}
             />
+            {/* //! 카트 모달 창 */}
         </>
     );
 }

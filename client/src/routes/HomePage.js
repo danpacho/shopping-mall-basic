@@ -10,8 +10,6 @@ import Header from "../utils/Header";
 import MainLogo from "../utils/MainLogo";
 import NavBar from "../utils/NavBar";
 //-------------------------------------------------------------
-import { useDispatch, useSelector } from "react-redux";
-import { logoutUser } from "../_action/user_action";
 import {
     Login,
     UserAdd,
@@ -25,8 +23,12 @@ import LandingPage from "../components/LandingPage";
 import useToggleBar from "../utils/hooks/useToggleBar";
 import useProductsInfo from "../utils/hooks/useProductsInfo";
 import ProfileImageContainer from "../utils/ProfileImageContainer";
-import { useEffect, useState } from "react";
+//-------------------------------------------------------------
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../_action/user_action";
 import Cart from "../components/Cart";
+//-------------------------------------------------------------
+import { useEffect } from "react";
 //-------------------------------------------------------------
 
 const Button = styled.button`
@@ -201,9 +203,9 @@ function HomePage() {
                     </>
                 )}
             </Header>
+
             <LandingPage products={products} />
-            {/* //! 카트 모달 창 */}
-            <Cart />
+            <Cart userLoginState={userData?.isAuth} />
         </Container>
     );
 }

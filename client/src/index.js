@@ -2,6 +2,9 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./components/App";
 
+//! context API
+import { CartProvider } from "../src/context/CartContext";
+
 //! 리덕스 & 미들웨어 설정
 import { Provider } from "react-redux";
 import { applyMiddleware, createStore } from "redux";
@@ -23,7 +26,9 @@ ReactDOM.render(
             //!  리덕스 개발자 도구 사용을 위함.
         )}
     >
-        <App />
+        <CartProvider>
+            <App />
+        </CartProvider>
     </Provider>,
     document.getElementById("render")
 );

@@ -1,5 +1,12 @@
 //!-----------------------------------------------------------------------------------------
 
+import {
+    ADD_CART_ITEM,
+    DELETE_CART_ITEM,
+    GET_CART_ITEM,
+    RESET_CART_ITEM,
+} from "./cart_types";
+
 const STORAGE_KEY = "CART";
 
 //!-----------------------------------------------------------------------------------------
@@ -19,7 +26,10 @@ const addToArray = (orginalItem, addItem) => orginalItem.concat(addItem);
 export const readCartItem = () => {
     const items = getCartItems(STORAGE_KEY);
 
-    return items;
+    return {
+        type: GET_CART_ITEM,
+        payload: items,
+    };
 };
 
 export const addCartItem = (addedItem) => {
@@ -33,25 +43,44 @@ export const addCartItem = (addedItem) => {
         if (filterNum === 0) {
             const addedArray = addToArray(items, addedItem);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(addedArray));
-            return addedArray;
+            return {
+                type: ADD_CART_ITEM,
+                payload: addedArray,
+            };
         } else {
-            alert("items already exists😅");
+            alert("Items Already Exists😅!");
+            return {
+                type: ADD_CART_ITEM,
+                payload: items,
+            };
         }
     } else {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(addedItem));
-        return addedItem;
+        return {
+            type: ADD_CART_ITEM,
+            payload: addedItem,
+        };
     }
 };
 
 export const deleteCartItem = (deleteId) => {
-    console.log(deleteId);
     const items = getCartItems(STORAGE_KEY);
 
     const deletedArray = deleteFromArrayElement(items, deleteId);
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(deletedArray));
 
-    return deletedArray;
+    return {
+        type: DELETE_CART_ITEM,
+        payload: deletedArray,
+    };
 };
 
-export const resetCartItem = () => localStorage.removeItem(STORAGE_KEY);
+export const resetCartItem = () => {
+    localStorage.removeItem(STORAGE_KEY);
+
+    return {
+        type: RESET_CART_ITEM,
+        return: [],
+    };
+};
