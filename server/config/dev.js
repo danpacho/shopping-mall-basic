@@ -1,4 +1,4 @@
 module.exports = {
     mongoURI:
-        "mongodb+srv://June:david725@@youtubeserver.0hqwu.mongodb.net/<dbname>?retryWrites=true&w=majority",
+        "mongodb+srv://June:<password>@noteshare.bi4vz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
 };

@@ -1,4 +1,6 @@
-// 인증 처리를 하는 곳.
+//! User authentication
+
+// import user schema.
 const { User } = require("../models/User");
 
 const authUser = (req, res, next) => {
